@@ -29,6 +29,13 @@ namespace AzCosmosDB_OData_Shim
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            
+            var Endpoint = Configuration.GetValue<string>("Modules:CosmosConfig:Endpoint");
+            var Key = Configuration.GetValue<string>("Modules:CosmosConfig:Key");
+            var DatabaseId = Configuration.GetValue<string>("Modules:CosmosConfig:DatabaseId");
+            var CollectionId = Configuration.GetValue<string>("Modules:CosmosConfig:CollectionId");
+
+            services.AddSingleton<IDocumentDBRepository<AzCosmosDB_OData_Shim.Sflight>>(new DocumentDBRepository<AzCosmosDB_OData_Shim.Sflight>(Endpoint,Key,DatabaseId,CollectionId));
             services.AddOData();
         }
 
@@ -49,6 +56,7 @@ namespace AzCosmosDB_OData_Shim
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.Select().Filter().OrderBy().Count().MaxTop(10);
                 endpoints.MapODataRoute("odata", "odata", GetEdmModel());
             });
         }
@@ -56,7 +64,7 @@ namespace AzCosmosDB_OData_Shim
         private IEdmModel GetEdmModel()
         {
             var odataBuilder = new ODataConventionModelBuilder();
-            odataBuilder.EntitySet<WeatherForecast>("WeatherForecast");
+            odataBuilder.EntitySet<Sflight>("Sflight");
 
             return odataBuilder.GetEdmModel();
         }
