@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.5.8" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GenericODataWebAPI.Core\GenericODataWebAPI.Core.csproj" />
+    <ProjectReference Include="..\BlobStoreProvider.cs\GenericODataWebAPI.Blob.csproj" />
+    <ProjectReference Include="..\CosmosDBProvider\GenericODataWebAPI.Cosmos.csproj" />
+  </ItemGroup>
+</Project>
