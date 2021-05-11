@@ -1,5 +1,0 @@
-{
-    "appService.preDeployTask": "publish-release",
-    "appService.deploySubpath": "bin\\Release\\netcoreapp3.1\\publish",
-    "appService.defaultWebAppToDeploy": "/subscriptions/f875671a-2e7c-4da2-9fb9-4e1cfcdeb250/resourceGroups/eun-saplab-s4-rg/providers/Microsoft.Web/sites/saplab-odata-shim-app"
-}
