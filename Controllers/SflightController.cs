@@ -23,10 +23,9 @@ namespace AzCosmosDB_OData_Shim.Controllers
         }
 
         [EnableQuery()]
-        public async Task<AzCosmosDB_OData_Shim.Sflight> Get()
+        public async Task<IEnumerable<AzCosmosDB_OData_Shim.Sflight>> Get()
         {
-            string id = "006";
-            return await Respository.GetItemAsync(id);
+            return await Respository.GetItemsAsync();
         }
     }
 }

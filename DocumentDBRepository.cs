@@ -40,12 +40,11 @@ namespace AzCosmosDB_OData_Shim
             return (await query.ExecuteNextAsync<T>()).First<T>();
         }
 
-        public async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predicate)
+        public async Task<IEnumerable<T>> GetItemsAsync()
         {
             IDocumentQuery<T> query = client.CreateDocumentQuery<T>(
                 UriFactory.CreateDocumentCollectionUri(this.DatabaseId, this.CollectionId),
-                new FeedOptions { MaxItemCount = -1 })
-                .Where(predicate)
+                new FeedOptions { MaxItemCount = 100 }) //use -1 for dynamic paging -> risk of more unintended resource consumption
                 .AsDocumentQuery();
 
             List<T> results = new List<T>();

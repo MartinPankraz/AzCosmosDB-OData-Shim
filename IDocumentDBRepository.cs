@@ -11,7 +11,7 @@ namespace AzCosmosDB_OData_Shim
         Task<Document> CreateItemAsync(T item);
         Task DeleteItemAsync(string id);
         Task<T> GetItemAsync(string id);
-        Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<T>> GetItemsAsync();
         Task<Document> UpdateItemAsync(string id, T item);
     }
 }
