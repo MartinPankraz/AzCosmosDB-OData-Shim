@@ -6,7 +6,7 @@ using Microsoft.Azure.Documents;
 
 namespace AzCosmosDB_OData_Shim
 {
-    public interface IDocumentDBRepository<T> where T : class
+    public interface IDocumentDBRepository<T> where T : class, ICosmosDocument
     {
         Task<Document> CreateItemAsync(T item);
         Task DeleteItemAsync(string id);

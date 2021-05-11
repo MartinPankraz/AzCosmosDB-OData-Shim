@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AzCosmosDB_OData_Shim
 {
-  public class Sflight
+  public class Sflight : ICosmosDocument
   {
     [Key]
     public string id { get; set; }
@@ -12,5 +12,9 @@ namespace AzCosmosDB_OData_Shim
     public string planetype { get; set; }
     public int seatsmax { get; set; }
     public int seatsocc { get; set; }
+  }
+
+  public interface ICosmosDocument {
+    string id { get; set; }
   }
 }

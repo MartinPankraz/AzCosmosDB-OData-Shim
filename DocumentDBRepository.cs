@@ -9,7 +9,7 @@ namespace AzCosmosDB_OData_Shim
     using Microsoft.Azure.Documents.Client;
     using Microsoft.Azure.Documents.Linq;
     
-    public class DocumentDBRepository<T> : IDocumentDBRepository<T> where T : class
+    public class DocumentDBRepository<T> : IDocumentDBRepository<T> where T : class , ICosmosDocument
     {
        
         private string Endpoint = "";
@@ -31,22 +31,13 @@ namespace AzCosmosDB_OData_Shim
 
         public async Task<T> GetItemAsync(string id)
         {
-            try
-            {
-                Document document = await client.ReadDocumentAsync(UriFactory.CreateDocumentUri(this.DatabaseId, this.CollectionId, id));
-                return (T)(dynamic)document;
-            }
-            catch (DocumentClientException e)
-            {
-                if (e.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    return null;
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            IDocumentQuery<T> query = client.CreateDocumentQuery<T>(
+                UriFactory.CreateDocumentCollectionUri(this.DatabaseId, this.CollectionId),
+                new FeedOptions { MaxItemCount = -1, EnableCrossPartitionQuery = true })
+                .Where(e => e.id == id)
+                .AsDocumentQuery();
+
+            return (await query.ExecuteNextAsync<T>()).First<T>();
         }
 
         public async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predicate)
