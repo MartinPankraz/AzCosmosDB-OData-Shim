@@ -14,7 +14,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OData.Edm;
 using GenericODataWebAPI.Core;
-// using GenericODataWebAPI.Blob;
 using GenericODataWebAPI.Cosmos; 
 
 namespace GenericODataWebAPI
