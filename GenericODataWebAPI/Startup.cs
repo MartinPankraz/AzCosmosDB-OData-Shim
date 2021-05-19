@@ -48,6 +48,9 @@ namespace GenericODataWebAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }else
+            {
+                app.UseExceptionHandler("/Home/Error");
             }
 
             app.UseHttpsRedirection();
