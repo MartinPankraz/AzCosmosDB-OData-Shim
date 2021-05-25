@@ -60,6 +60,7 @@ namespace GenericODataWebAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.EnableDependencyInjection();
                 endpoints.Select().Filter().OrderBy().Count().MaxTop(100);
                 endpoints.MapODataRoute("odata", "odata", GetEdmModel());
             });

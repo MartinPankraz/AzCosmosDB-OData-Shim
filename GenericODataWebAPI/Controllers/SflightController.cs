@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using GenericODataWebAPI.Core;
 namespace GenericODataWebAPI.Controllers
 {
+    [ODataRouting]
     public class SflightController : ControllerBase
     {
         private readonly IDataRepository<Sflight> Repository;
@@ -19,6 +20,19 @@ namespace GenericODataWebAPI.Controllers
         public async Task<IEnumerable<Sflight>> Get()
         {
             return await Repository.GetItemsAsync();
+        }
+
+        
+        [EnableQuery]
+        [HttpGet("odata/Sflight({id})")]
+        public async Task<Sflight> Get(string id)
+        {
+            //cut leading and trailing quotes from string. Data service expects the content only.
+            if(id.StartsWith("'") && id.EndsWith("'")){
+                var length = id.Length - 2;
+                id = id.Substring(1,length);
+            }
+            return await Repository.GetItemAsync(id);       
         }
 
         [EnableQuery]
