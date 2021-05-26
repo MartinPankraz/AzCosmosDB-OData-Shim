@@ -55,8 +55,10 @@
                     // Ts.Add(await resultSet.ReadNextAsync()).First();
 
                     FeedResponse<T> response = await resultSet.ReadNextAsync();
-                    T sale = response.First();
-                    Ts.AddRange(response);
+                    if(response.Count > 0){
+                        T sale = response.First();
+                        Ts.AddRange(response);
+                    }
                 }
             }
             return Ts;
