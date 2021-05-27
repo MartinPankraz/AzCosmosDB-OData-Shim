@@ -43,5 +43,10 @@ namespace GenericODataWebAPI.Blob
         {
             throw new NotImplementedException();
         }
+
+        public async Task<string> PatchItemAsync(string id, T item)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

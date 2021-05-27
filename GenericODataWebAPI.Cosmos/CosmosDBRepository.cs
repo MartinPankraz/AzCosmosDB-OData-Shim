@@ -76,6 +76,27 @@
             return response.ETag;
         }
 
+        public async Task<string> PatchItemAsync(string id, T item)
+        {
+            Task<ItemResponse<T>> existingItem = container.ReadItemAsync<T>(partitionKey: new PartitionKey(id), id: id);
+            //identify attributes of item to reflect on Generic T
+            var properties = from p in typeof(T).GetProperties()
+                where p.PropertyType == typeof(string) &&
+                    p.CanRead &&
+                    p.CanWrite
+                select p;
+            //iterate item to find patched attributes and add to existing before upserting
+            foreach (var property in properties)
+            {
+                var value = (string)property.GetValue(item, null);
+                if (value != null){
+                    property.SetValue(existingItem, property.GetValue(item), null);
+                }
+            }
+            ItemResponse<T> response = await container.UpsertItemAsync(item, new PartitionKey(item.id));
+            return response.ETag;
+        }
+
         public async Task DeleteItemAsync(string id)
         {
             ItemResponse<T> response = await container.DeleteItemAsync<T>(partitionKey: new PartitionKey(id), id: id);

@@ -17,5 +17,7 @@ namespace GenericODataWebAPI.Core
 
         Task<string> UpdateItemAsync(string id, T item);
 
+        Task<string> PatchItemAsync(string id, T item);
+
     }
 }

@@ -50,6 +50,18 @@ namespace GenericODataWebAPI.Controllers
         }
 
         [EnableQuery]
+        [HttpPatch("odata/Sflight({id})")]
+        public async Task<string> Patch(string id, [FromBody]Sflight flight)
+        {
+            //cut leading and trailing quotes from string. Data service expects the content only.
+            if(id.StartsWith("'") && id.EndsWith("'")){
+                var length = id.Length - 2;
+                id = id.Substring(1,length);
+            }
+            return await Repository.PatchItemAsync(id, flight);
+        }
+
+        [EnableQuery]
         [HttpDelete]
         public async Task Delete([FromODataUri]string key)
         {
