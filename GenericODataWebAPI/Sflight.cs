@@ -11,8 +11,8 @@ namespace GenericODataWebAPI
     public string connid { get; set; }
     public string fldate { get; set; }
     public string planetype { get; set; }
-    public int seatsmax { get; set; }
-    public int seatsocc { get; set; }
+    public System.Nullable<int> seatsmax { get; set; }
+    public System.Nullable<int> seatsocc { get; set; }
   }
 
  

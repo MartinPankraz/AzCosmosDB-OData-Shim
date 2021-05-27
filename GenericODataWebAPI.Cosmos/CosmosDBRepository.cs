@@ -78,22 +78,22 @@
 
         public async Task<string> PatchItemAsync(string id, T item)
         {
-            Task<ItemResponse<T>> existingItem = container.ReadItemAsync<T>(partitionKey: new PartitionKey(id), id: id);
+            ItemResponse<T> existingItem = await container.ReadItemAsync<T>(partitionKey: new PartitionKey(id), id: id);
+            T existingObject = existingItem.Resource;
             //identify attributes of item to reflect on Generic T
             var properties = from p in typeof(T).GetProperties()
-                where p.PropertyType == typeof(string) &&
-                    p.CanRead &&
+                where p.CanRead &&
                     p.CanWrite
                 select p;
             //iterate item to find patched attributes and add to existing before upserting
             foreach (var property in properties)
             {
-                var value = (string)property.GetValue(item, null);
+                var value = property.GetValue(item, null);
                 if (value != null){
-                    property.SetValue(existingItem, property.GetValue(item), null);
+                    property.SetValue(existingObject, property.GetValue(item), null);
                 }
             }
-            ItemResponse<T> response = await container.UpsertItemAsync(item, new PartitionKey(item.id));
+            ItemResponse<T> response = await container.UpsertItemAsync(existingObject, new PartitionKey(id));
             return response.ETag;
         }
 
