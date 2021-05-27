@@ -32,6 +32,8 @@ namespace GenericODataWebAPI
         {
             services.AddControllers();
             
+            services.AddHealthChecks();
+
             var Endpoint = Configuration.GetValue<string>("Modules:CosmosConfig:Endpoint");
             var Key = Configuration.GetValue<string>("Modules:CosmosConfig:Key");
             var DatabaseId = Configuration.GetValue<string>("Modules:CosmosConfig:DatabaseId");
@@ -63,6 +65,8 @@ namespace GenericODataWebAPI
                 endpoints.EnableDependencyInjection();
                 endpoints.Select().Filter().OrderBy().Count().MaxTop(100);
                 endpoints.MapODataRoute("odata", "odata", GetEdmModel());
+
+                endpoints.MapHealthChecks("/health");
             });
         }
 
