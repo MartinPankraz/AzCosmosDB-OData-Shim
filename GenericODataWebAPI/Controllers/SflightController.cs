@@ -27,12 +27,7 @@ namespace GenericODataWebAPI.Controllers
         [HttpGet("odata/Sflight({id})")]
         public async Task<Sflight> Get(string id)
         {
-            //cut leading and trailing quotes from string. Data service expects the content only.
-            if(id.StartsWith("'") && id.EndsWith("'")){
-                var length = id.Length - 2;
-                id = id.Substring(1,length);
-            }
-            return await Repository.GetItemAsync(id);       
+            return await Repository.GetItemAsync(getStringFromOdataPath(id));       
         }
 
         [EnableQuery]
@@ -43,22 +38,17 @@ namespace GenericODataWebAPI.Controllers
         }
         
         [EnableQuery]
-        [HttpPut]
-        public async Task<string> Put([FromBody]Sflight flight)
+        [HttpPut("odata/Sflight({id})")]
+        public async Task<string> Put(string id, [FromBody]Sflight flight)
         {
-            return await Repository.UpdateItemAsync(flight.id, flight);
+            return await Repository.UpdateItemAsync(getStringFromOdataPath(id), flight);
         }
 
         [EnableQuery]
         [HttpPatch("odata/Sflight({id})")]
         public async Task<string> Patch(string id, [FromBody]Sflight flight)
         {
-            //cut leading and trailing quotes from string. Data service expects the content only.
-            if(id.StartsWith("'") && id.EndsWith("'")){
-                var length = id.Length - 2;
-                id = id.Substring(1,length);
-            }
-            return await Repository.PatchItemAsync(id, flight);
+            return await Repository.PatchItemAsync(getStringFromOdataPath(id), flight);
         }
 
         [EnableQuery]
@@ -66,6 +56,20 @@ namespace GenericODataWebAPI.Controllers
         public async Task Delete([FromODataUri]string key)
         {
             await Repository.DeleteItemAsync(key);
+        }
+
+        /**
+            Typical id is given to service as https://<your service url>>/odata/<entity>('001'). That gets parsed as string including the quote.
+            We need to drop it to avoid parsing error.
+        */
+        private string getStringFromOdataPath(string extractedId){
+            string id = "";
+            //cut leading and trailing quotes from string. Data service expects the content only.
+            if(extractedId.StartsWith("'") && extractedId.EndsWith("'")){
+                var length = extractedId.Length - 2;
+                id = extractedId.Substring(1,length);
+            }
+            return id;
         }
     }
 }
