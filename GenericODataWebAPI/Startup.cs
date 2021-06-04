@@ -8,14 +8,17 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OData.Edm;
+//using Microsoft.Identity.Web;
 using GenericODataWebAPI.Core;
-using GenericODataWebAPI.Cosmos; 
+using GenericODataWebAPI.Cosmos;
+//using System.IdentityModel.Tokens.Jwt;
 
 namespace GenericODataWebAPI
 {
@@ -31,6 +34,9 @@ namespace GenericODataWebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            /*services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddMicrosoftIdentityWebApi(Configuration, "AzureAd");*/
+
             services.AddControllers();
             
             services.AddHealthChecks();
@@ -56,9 +62,10 @@ namespace GenericODataWebAPI
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseAuthorization();
+
+            //app.UseAuthentication();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

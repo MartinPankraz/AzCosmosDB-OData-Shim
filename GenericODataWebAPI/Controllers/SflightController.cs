@@ -4,7 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Identity.Web.Resource;
 using GenericODataWebAPI.Core;
+
 namespace GenericODataWebAPI.Controllers
 {
     [ODataRouting]
@@ -27,6 +30,7 @@ namespace GenericODataWebAPI.Controllers
         [HttpGet("odata/Sflight({id})")]
         public async Task<Sflight> Get(string id)
         {
+            //HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             return await Repository.GetItemAsync(getStringFromOdataPath(id));       
         }
 
@@ -34,6 +38,7 @@ namespace GenericODataWebAPI.Controllers
         [HttpPost]
         public async Task<string> Post([FromBody]Sflight flight)
         {
+            //HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             return await Repository.UpdateItemAsync(flight.id, flight);
         }
         
@@ -41,6 +46,7 @@ namespace GenericODataWebAPI.Controllers
         [HttpPut("odata/Sflight({id})")]
         public async Task<string> Put(string id, [FromBody]Sflight flight)
         {
+            //HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             return await Repository.UpdateItemAsync(getStringFromOdataPath(id), flight);
         }
 
@@ -48,6 +54,7 @@ namespace GenericODataWebAPI.Controllers
         [HttpPatch("odata/Sflight({id})")]
         public async Task<string> Patch(string id, [FromBody]Sflight flight)
         {
+            //HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             return await Repository.PatchItemAsync(getStringFromOdataPath(id), flight);
         }
 
@@ -55,6 +62,7 @@ namespace GenericODataWebAPI.Controllers
         [HttpDelete]
         public async Task Delete([FromODataUri]string key)
         {
+            //HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             await Repository.DeleteItemAsync(key);
         }
 
