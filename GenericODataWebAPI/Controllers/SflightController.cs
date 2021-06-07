@@ -30,15 +30,13 @@ namespace GenericODataWebAPI.Controllers
         
         [EnableQuery]
         [Authorize(Roles = "Reader")]
-        [HttpGet("api/odata/Sflight({id})")]
-        public async Task<Sflight> Get(string id)
+        public async Task<Sflight> Get(string key)
         {
-            return await Repository.GetItemAsync(getStringFromOdataPath(id));       
+            return await Repository.GetItemAsync(key);       
         }
 
         [EnableQuery]
         [Authorize(Roles = "Writer")]
-        [HttpPost]
         public async Task<string> Post([FromBody]Sflight flight)
         {
             return await Repository.UpdateItemAsync(flight.id, flight);
@@ -46,40 +44,23 @@ namespace GenericODataWebAPI.Controllers
         
         [EnableQuery]
         [Authorize(Roles = "Writer")]
-        [HttpPut("api/odata/Sflight({id})")]
-        public async Task<string> Put(string id, [FromBody]Sflight flight)
+        public async Task<string> Put(string key, [FromBody]Sflight flight)
         {
-            return await Repository.UpdateItemAsync(getStringFromOdataPath(id), flight);
+            return await Repository.UpdateItemAsync(key, flight);
         }
 
         [EnableQuery]
         [Authorize(Roles = "Writer")]
-        [HttpPatch("api/odata/Sflight({id})")]
-        public async Task<string> Patch(string id, [FromBody]Sflight flight)
+        public async Task<string> Patch(string key, Delta<Sflight> flight)
         {
-            return await Repository.PatchItemAsync(getStringFromOdataPath(id), flight);
+            return await Repository.PatchItemAsync(key, flight);
         }
 
         [EnableQuery]
         [Authorize(Roles = "Writer")]
-        [HttpDelete]
         public async Task Delete([FromODataUri]string key)
         {
             await Repository.DeleteItemAsync(key);
-        }
-
-        /**
-            Typical id is given to service as https://<your service url>>/odata/<entity>('001'). That gets parsed as string including the quote.
-            We need to drop it to avoid parsing error.
-        */
-        private string getStringFromOdataPath(string extractedId){
-            string id = "";
-            //cut leading and trailing quotes from string. Data service expects the content only.
-            if(extractedId.StartsWith("'") && extractedId.EndsWith("'")){
-                var length = extractedId.Length - 2;
-                id = extractedId.Substring(1,length);
-            }
-            return id;
         }
     }
 }
