@@ -10,6 +10,7 @@ using GenericODataWebAPI.Core;
 
 namespace GenericODataWebAPI.Controllers
 {
+    [Authorize(Roles = "Sflight")]
     [ODataRouting]
     public class SflightController : ControllerBase
     {
@@ -18,8 +19,9 @@ namespace GenericODataWebAPI.Controllers
         {
             this.Repository = Repository;
         }
-
+        
         [EnableQuery()]
+        [Authorize(Roles = "Reader")]
         public async Task<IEnumerable<Sflight>> Get()
         {
             return await Repository.GetItemsAsync();
@@ -27,42 +29,42 @@ namespace GenericODataWebAPI.Controllers
 
         
         [EnableQuery]
-        [HttpGet("odata/Sflight({id})")]
+        [Authorize(Roles = "Reader")]
+        [HttpGet("api/odata/Sflight({id})")]
         public async Task<Sflight> Get(string id)
         {
-            //HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             return await Repository.GetItemAsync(getStringFromOdataPath(id));       
         }
 
         [EnableQuery]
+        [Authorize(Roles = "Writer")]
         [HttpPost]
         public async Task<string> Post([FromBody]Sflight flight)
         {
-            //HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             return await Repository.UpdateItemAsync(flight.id, flight);
         }
         
         [EnableQuery]
-        [HttpPut("odata/Sflight({id})")]
+        [Authorize(Roles = "Writer")]
+        [HttpPut("api/odata/Sflight({id})")]
         public async Task<string> Put(string id, [FromBody]Sflight flight)
         {
-            //HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             return await Repository.UpdateItemAsync(getStringFromOdataPath(id), flight);
         }
 
         [EnableQuery]
-        [HttpPatch("odata/Sflight({id})")]
+        [Authorize(Roles = "Writer")]
+        [HttpPatch("api/odata/Sflight({id})")]
         public async Task<string> Patch(string id, [FromBody]Sflight flight)
         {
-            //HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             return await Repository.PatchItemAsync(getStringFromOdataPath(id), flight);
         }
 
         [EnableQuery]
+        [Authorize(Roles = "Writer")]
         [HttpDelete]
         public async Task Delete([FromODataUri]string key)
         {
-            //HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
             await Repository.DeleteItemAsync(key);
         }
 
