@@ -4,9 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Identity.Web.Resource;
 using GenericODataWebAPI.Core;
+
 namespace GenericODataWebAPI.Controllers
 {
+    [Authorize(Roles = "Sflight")]
     [ODataRouting]
     public class SflightController : ControllerBase
     {
@@ -15,8 +19,9 @@ namespace GenericODataWebAPI.Controllers
         {
             this.Repository = Repository;
         }
-
+        
         [EnableQuery()]
+        [Authorize(Roles = "Reader")]
         public async Task<IEnumerable<Sflight>> Get()
         {
             return await Repository.GetItemsAsync();
@@ -24,45 +29,35 @@ namespace GenericODataWebAPI.Controllers
 
         
         [EnableQuery]
-        [HttpGet("odata/Sflight({id})")]
-        public async Task<Sflight> Get(string id)
+        [Authorize(Roles = "Reader")]
+        public async Task<Sflight> Get(string key)
         {
-            //cut leading and trailing quotes from string. Data service expects the content only.
-            if(id.StartsWith("'") && id.EndsWith("'")){
-                var length = id.Length - 2;
-                id = id.Substring(1,length);
-            }
-            return await Repository.GetItemAsync(id);       
+            return await Repository.GetItemAsync(key);       
         }
 
         [EnableQuery]
-        [HttpPost]
+        [Authorize(Roles = "Writer")]
         public async Task<string> Post([FromBody]Sflight flight)
         {
             return await Repository.UpdateItemAsync(flight.id, flight);
         }
         
         [EnableQuery]
-        [HttpPut]
-        public async Task<string> Put([FromBody]Sflight flight)
+        [Authorize(Roles = "Writer")]
+        public async Task<string> Put(string key, [FromBody]Sflight flight)
         {
-            return await Repository.UpdateItemAsync(flight.id, flight);
+            return await Repository.UpdateItemAsync(key, flight);
         }
 
         [EnableQuery]
-        [HttpPatch("odata/Sflight({id})")]
-        public async Task<string> Patch(string id, [FromBody]Sflight flight)
+        [Authorize(Roles = "Writer")]
+        public async Task<string> Patch(string key, Delta<Sflight> flight)
         {
-            //cut leading and trailing quotes from string. Data service expects the content only.
-            if(id.StartsWith("'") && id.EndsWith("'")){
-                var length = id.Length - 2;
-                id = id.Substring(1,length);
-            }
-            return await Repository.PatchItemAsync(id, flight);
+            return await Repository.PatchItemAsync(key, flight);
         }
 
         [EnableQuery]
-        [HttpDelete]
+        [Authorize(Roles = "Writer")]
         public async Task Delete([FromODataUri]string key)
         {
             await Repository.DeleteItemAsync(key);

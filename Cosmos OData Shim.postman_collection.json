@@ -1,0 +1,174 @@
+{
+	"info": {
+		"_postman_id": "7fc26d6f-bbf1-461b-a3c0-74caf800e234",
+		"name": "Cosmos OData Shim",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET Geode",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:5001/geode",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"geode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:5001/health",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Sflight list",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:5001/odata/Sflight",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"odata",
+						"Sflight"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT new flight (or update)",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\":\"001\",\r\n\"carrid\":\"BB\",\r\n\"connid\":\"0064\",\r\n\"fldate\":\"2021-08-13\",\r\n\"planetype\":\"767-200\",\r\n\"seatsmax\":260,\r\n\"seatsocc\":0}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/odata/Sflight('003')",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"odata",
+						"Sflight('003')"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH update flight",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"seatsocc\":0}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/odata/Sflight('006')",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"odata",
+						"Sflight('006')"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET single flight by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:5001/odata/Sflight('006')",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"odata",
+						"Sflight('006')"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST update/create flight",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\":\"005\",\r\n\"carrid\":\"UU\",\r\n\"connid\":\"0064\",\r\n\"fldate\":\"2021-08-13\",\r\n\"planetype\":\"767-200\",\r\n\"seatsmax\":260,\r\n\"seatsocc\":0}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/odata/Sflight",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"odata",
+						"Sflight"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

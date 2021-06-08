@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.AspNet.OData;
 
 namespace GenericODataWebAPI.Core
 {
@@ -17,7 +18,7 @@ namespace GenericODataWebAPI.Core
 
         Task<string> UpdateItemAsync(string id, T item);
 
-        Task<string> PatchItemAsync(string id, T item);
+        Task<string> PatchItemAsync(string id, Delta<T> item);
 
     }
 }

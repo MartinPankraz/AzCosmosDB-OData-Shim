@@ -8,7 +8,7 @@
     using Microsoft.Azure.Cosmos;
     using Microsoft.Azure.Cosmos.Linq;
     using GenericODataWebAPI.Core;
-
+    using Microsoft.AspNet.OData;
     
     public class CosmosDBRepository<T> : IDataRepository<T> where T : class , IDocumentWithId
     {
@@ -76,7 +76,7 @@
             return response.ETag;
         }
 
-        public async Task<string> PatchItemAsync(string id, T item)
+        public async Task<string> PatchItemAsync(string id, Delta<T> item)
         {
             ItemResponse<T> existingItem = await container.ReadItemAsync<T>(partitionKey: new PartitionKey(id), id: id);
             T existingObject = existingItem.Resource;

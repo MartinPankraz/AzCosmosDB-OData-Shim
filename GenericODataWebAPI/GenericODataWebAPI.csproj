@@ -3,11 +3,12 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.5.8" />
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.5.8"/>
+    <PackageReference Include="Microsoft.Identity.Web" Version="1.12.0"/>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GenericODataWebAPI.Core\GenericODataWebAPI.Core.csproj" />
-    <ProjectReference Include="..\GenericODataWebAPI.Blob\GenericODataWebAPI.Blob.csproj" />
-    <ProjectReference Include="..\GenericODataWebAPI.Cosmos\GenericODataWebAPI.Cosmos.csproj" />
+    <ProjectReference Include="..\GenericODataWebAPI.Core\GenericODataWebAPI.Core.csproj"/>
+    <ProjectReference Include="..\GenericODataWebAPI.Blob\GenericODataWebAPI.Blob.csproj"/>
+    <ProjectReference Include="..\GenericODataWebAPI.Cosmos\GenericODataWebAPI.Cosmos.csproj"/>
   </ItemGroup>
 </Project>

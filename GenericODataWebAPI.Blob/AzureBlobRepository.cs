@@ -8,6 +8,7 @@ namespace GenericODataWebAPI.Blob
     using Azure.Storage.Blobs;
     using GenericODataWebAPI.Core; 
     using System.Text.Json;
+    using Microsoft.AspNet.OData;
 
     public class AzureBlobRepository<T> : IDataRepository<T> where T : class, IDocumentWithId
     {
@@ -44,7 +45,7 @@ namespace GenericODataWebAPI.Blob
             throw new NotImplementedException();
         }
 
-        public async Task<string> PatchItemAsync(string id, T item)
+        public async Task<string> PatchItemAsync(string id, Delta<T> item)
         {
             throw new NotImplementedException();
         }

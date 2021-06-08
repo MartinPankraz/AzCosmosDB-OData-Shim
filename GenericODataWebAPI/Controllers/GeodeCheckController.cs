@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GenericODataWebAPI.Controllers
 {
     [ApiController]
-    [Route("/geode")]
+    [Route("/api/geode")]
     public class GeodeCheckController : ControllerBase
     {
         [HttpGet]
