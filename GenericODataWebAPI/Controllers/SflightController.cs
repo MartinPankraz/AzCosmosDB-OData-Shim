@@ -20,7 +20,7 @@ namespace GenericODataWebAPI.Controllers
             this.Repository = Repository;
         }
         
-        [EnableQuery()]
+        [EnableQuery]
         [Authorize(Roles = "Reader")]
         public async Task<IEnumerable<Sflight>> Get()
         {

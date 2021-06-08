@@ -80,19 +80,8 @@
         {
             ItemResponse<T> existingItem = await container.ReadItemAsync<T>(partitionKey: new PartitionKey(id), id: id);
             T existingObject = existingItem.Resource;
-            //identify attributes of item to reflect on Generic T
-            var properties = from p in typeof(T).GetProperties()
-                where p.CanRead &&
-                    p.CanWrite
-                select p;
-            //iterate item to find patched attributes and add to existing before upserting
-            foreach (var property in properties)
-            {
-                var value = property.GetValue(item, null);
-                if (value != null){
-                    property.SetValue(existingObject, property.GetValue(item), null);
-                }
-            }
+            //apply delta to existing resource
+            item.CopyChangedValues(existingObject);
             ItemResponse<T> response = await container.UpsertItemAsync(existingObject, new PartitionKey(id));
             return response.ETag;
         }

@@ -54,6 +54,10 @@ namespace GenericODataWebAPI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // If we do this in the request we can look for the x-forwarded for header.
+            // OR give configuration manual control like we have done here. YMMV
+            app.UseRequestRewriter(new RequestRewriterOptions(new List<string>(){$"{System.Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME")}.azurewebsites.net"},System.Environment.GetEnvironmentVariable("RewriteModule:NewRoute")));
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
