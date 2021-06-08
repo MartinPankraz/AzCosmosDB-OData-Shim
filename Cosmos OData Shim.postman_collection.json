@@ -11,13 +11,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost:5001/geode",
+					"raw": "https://localhost:5001/api/geode",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"port": "5001",
 					"path": [
+						"api",
 						"geode"
 					]
 				}
@@ -46,16 +47,27 @@
 		{
 			"name": "GET Sflight list",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bearerToken}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost:5001/odata/Sflight",
+					"raw": "https://localhost:5001/api/odata/Sflight",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"port": "5001",
 					"path": [
+						"api",
 						"odata",
 						"Sflight"
 					]
@@ -64,58 +76,32 @@
 			"response": []
 		},
 		{
-			"name": "PUT new flight (or update)",
+			"name": "GET Sflight list via FrontDoor",
 			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\"id\":\"001\",\r\n\"carrid\":\"BB\",\r\n\"connid\":\"0064\",\r\n\"fldate\":\"2021-08-13\",\r\n\"planetype\":\"767-200\",\r\n\"seatsmax\":260,\r\n\"seatsocc\":0}",
-					"options": {
-						"raw": {
-							"language": "json"
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bearerToken}}",
+							"type": "string"
 						}
-					}
-				},
-				"url": {
-					"raw": "https://localhost:5001/odata/Sflight('003')",
-					"protocol": "https",
-					"host": [
-						"localhost"
-					],
-					"port": "5001",
-					"path": [
-						"odata",
-						"Sflight('003')"
 					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "PATCH update flight",
-			"request": {
-				"method": "PATCH",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\"seatsocc\":0}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
 				},
+				"method": "GET",
+				"header": [],
 				"url": {
-					"raw": "https://localhost:5001/odata/Sflight('006')",
+					"raw": "https://{{FrontDoor domain}}.azurefd.net/api/odata/Sflight",
 					"protocol": "https",
 					"host": [
-						"localhost"
+						"{{FrontDoor domain}}",
+						"azurefd",
+						"net"
 					],
-					"port": "5001",
 					"path": [
+						"api",
 						"odata",
-						"Sflight('006')"
+						"Sflight"
 					]
 				}
 			},
@@ -124,16 +110,107 @@
 		{
 			"name": "GET single flight by id",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bearerToken}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost:5001/odata/Sflight('006')",
+					"raw": "https://localhost:5001/api/odata/Sflight('006')",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"port": "5001",
 					"path": [
+						"api",
+						"odata",
+						"Sflight('006')"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT new flight (or update)",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bearerToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\":\"004\",\r\n\"carrid\":\"BB\",\r\n\"connid\":\"0064\",\r\n\"fldate\":\"2021-08-13\",\r\n\"planetype\":\"767-200\",\r\n\"seatsmax\":260,\r\n\"seatsocc\":0}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/odata/Sflight('004')",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"odata",
+						"Sflight('004')"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PATCH update flight",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bearerToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"seatsocc\":20}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/odata/Sflight('006')",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
 						"odata",
 						"Sflight('006')"
 					]
@@ -144,11 +221,21 @@
 		{
 			"name": "POST update/create flight",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bearerToken}}",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"id\":\"005\",\r\n\"carrid\":\"UU\",\r\n\"connid\":\"0064\",\r\n\"fldate\":\"2021-08-13\",\r\n\"planetype\":\"767-200\",\r\n\"seatsmax\":260,\r\n\"seatsocc\":0}",
+					"raw": "{\"id\":\"007\",\r\n\"carrid\":\"UU\",\r\n\"connid\":\"0064\",\r\n\"fldate\":\"2021-08-13\",\r\n\"planetype\":\"767-200\",\r\n\"seatsmax\":260,\r\n\"seatsocc\":0}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -156,15 +243,98 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:5001/odata/Sflight",
+					"raw": "https://localhost:5001/api/odata/Sflight",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
 					"port": "5001",
 					"path": [
+						"api",
 						"odata",
 						"Sflight"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get OAuth Client Credentials from AAD",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"try {\r",
+							"    if (pm.environment.get(\"client_id\") === \"\")\r",
+							"    {\r",
+							"        console.log(\"You need to enter *ClientID* environment variable first.\");\r",
+							"    }\r",
+							"    if (pm.environment.get(\"client_secret\") === \"\")\r",
+							"    {\r",
+							"        console.log(\"You need to enter *ClientSecret* environment variable first.\");\r",
+							"    }\r",
+							"    if (pm.environment.get(\"AAD tenant id\") === \"\")\r",
+							"    {\r",
+							"        console.log(\"You need to enter *TenantID* environment variable first.\");\r",
+							"    }\r",
+							"    else\r",
+							"    {\r",
+							"        var json = JSON.parse(responseBody);\r",
+							"        postman.setEnvironmentVariable(\"bearerToken\", json.access_token);\r",
+							"    }\r",
+							"}\r",
+							"catch (e) {\r",
+							"    console.log(e);\r",
+							"}\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "{{client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "{{scope}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{client_secret}}",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://login.microsoftonline.com/{{AAD tenant id}}/oauth2/v2.0/token",
+					"protocol": "https",
+					"host": [
+						"login",
+						"microsoftonline",
+						"com"
+					],
+					"path": [
+						"{{AAD tenant id}}",
+						"oauth2",
+						"v2.0",
+						"token"
 					]
 				}
 			},
