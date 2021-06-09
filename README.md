@@ -4,7 +4,9 @@ Project to connect consumers like SAP Business Technology Platform apps/services
 
 Find the related blog on the SAP community [here]().
 
-Find the related public Azure DevOps project for CI/CD [here](https://dev.azure.com/mapankra/CosmosDB%20OData%20SAP%20umbrella).
+Find our public Azure DevOps project for some inspiration on the CI/CD aspect of the solution [here](https://dev.azure.com/mapankra/CosmosDB%20OData%20SAP%20umbrella).
+
+We implemented a simple CI/CD process with classic pipelines. We would recommend to code them in YAML usually, but for a simple entry into this topic we stuck to the more visually "speaking" classic flavor of it.
 
 ![geode](images/geode-pattern.png)
 _Fig.1 architecture overview_
@@ -20,7 +22,7 @@ Our implementation creates a fully functional solution of the geode pattern test
 - Access to SE80 on SAP backend to upload [Z-Programm](ZDemoFrontDoorReport.abap) for data extraction HTTP Post via ABAP.
 
 ## Deployment Guide
-All deployments could be done via scripting and CI/CD. For simple reproduction find below the manual steps:
+For step-by-step reproduction find the manual steps below.
 
 ### Azure CosmosDB
 <details>
@@ -61,11 +63,11 @@ Wait for provisioning to finish.
 - App Service Plan (SKU) -> can be anything that supports SSL (currently default B1 for instance)
 
 #### Configure App Service
-- Essentials -> Health Check -> Enable and put path /health
+- Essentials -> Health Check -> Enable and put path `/health`
 ##### Settings
 - Networking -> Configure VNet integration with the related VNets where Cosmos private endpoints sit. Be aware you will need enough space for an additional empty subnet.
-- Configuration -> Add app setting "geode-name" and put the location name where your app service runs (e.g europe or west us). We will use it later on for our geode service to be able to trace-back easily from where our requests were served
-- Configuration -> Add app setting "WEBSITE_VNET_ROUTE_ALL" with value 1. This ensures that all traffic leaving app service stays on the private VNet, so that it will use the private endpoint of CosmosDB. Otherwise you will see Firewall hits on Cosmos.
+- Configuration -> Add app setting **geode-name** and put the location name where your app service runs (e.g europe or west us). We will use it later on for our geode service to be able to trace-back easily from where our requests were served
+- Configuration -> Add app setting **WEBSITE_VNET_ROUTE_ALL** with value **1**. This ensures that all traffic leaving app service stays on the private VNet, so that it will use the private endpoint of CosmosDB. Otherwise you will see Firewall hits on Cosmos.
 </details>
 
 ### FrontDoor (global routing based on geo and availability)
@@ -84,18 +86,18 @@ Once provisioned pickup Frontend host URL for SAP BTP Destination setup later on
 <details>
 <summary>click to expand</summary>
 
-- Create a destination named "AzureFrontDoor" for external https connections on SM59 in your ABAP system
-- Fill your FrontDoor address (yourdomain.azurefd.net) and port 443. Alternatively you could fill your private CosmosDB connectivity details and connect directly. The ABAP SDK for AZure could give you head start doing that. We advise against it, because the geode pattern would be bypassed. FrontDoor ensures that you reach the closest App Service and CosmosDB instance that is available.
-- Set SSL active and maintain cert-list for Azure SSL certificates. You can do that from transaction STRUST. The certificate chain can be exported from any browser when you try to hit your FrontDoor domain and then inspect the certificates. You need to import the whole chain. While writing this doc that was:
+- Create a destination named "AzureFrontDoor" for external https connections on **SM59** in your ABAP system
+- Fill your FrontDoor address (yourdomain.azurefd.net) and port 443. Alternatively you could fill your private CosmosDB connectivity details and connect directly. The [ABAP SDK for Azure](https://github.com/microsoft/ABAP-SDK-for-Azure) could give you head start doing that. We advise **against** it, because the geode pattern would be bypassed. FrontDoor ensures that you reach the closest App Service and CosmosDB instance that is available.
+- Set SSL active and maintain cert-list for Azure SSL certificates. You can do that from transaction **STRUST**. The certificate chain can be exported from any browser when you try to hit your FrontDoor domain and then inspect the certificates. You need to import the whole chain. While writing this doc that was:
 
     ![fd-cert-chain](images/fd-cert-chain.png)
 
 - Once finished you should make the connection test from SM59 and see http 404 as response. When the process on STRUST was not successfull you will get an SSL handshake error here.
 - Repeat the process for destination "AzureADLogin"
-- Fill your AD login endpoint login.microsoftonline.com, port 443 and Path prefix: /<your AAD tenant id>/oauth2/v2.0/token
-- Activate SSL and check STRUST once more if connection test fails
+- Fill your AD login endpoint login.microsoftonline.com, port 443 and Path prefix: /[your AAD tenant id]/oauth2/v2.0/token
+- Activate SSL and check **STRUST** once more if connection test fails
 
-- Create an ABAP program on SE80 based on the code in [ZDemoFrontDoorReport.abap](ZDemoFrontDoorReport.abap). It will leverage the popular demo data set SFlight.
+- Create an ABAP program on **SE80** based on the code in [ZDemoFrontDoorReport.abap](ZDemoFrontDoorReport.abap). It will leverage the popular demo data set SFlight.
 
 *Note:*
 I highly recommend checking the API calls through Postman first, because the http log on the SAP app server can be tedious. If you need to troubleshoot on SAP you would need to activate http trace info on SMICM, lock your work process on SAPGUI through SE38 (RSTRC000), navigate within that same session to SE80, trigger your progamm, go back to RSTRC000 and release your workpress and finally check the trace file on ST11 for your previously locked work process number.
@@ -188,4 +190,4 @@ You need Azure CLI setup for Powershell and an open session (az login) or instal
 
 # Final words
 
-Feel free to reach out over GitHub Issues in case of any questions :-) Until then happy integrating
+Feel free to reach out over GitHub Issues in case of any questions :-) Until then happy integrating and enjoy reading your SAP data globally.
