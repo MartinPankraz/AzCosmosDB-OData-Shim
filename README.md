@@ -1,22 +1,23 @@
 # AzCosmosDB-OData-Shim
-Project to connect consumers like SAP Business Technology Platform apps/services via OData with Azure CosmosDB. Furthermore it enables the geode-pattern for global read-access to selected SAP data.
+
+Project to connect consumers like SAP Business Technology Platform apps/services via OData with Azure CosmosDB. Furthermore it enables the [geode-pattern](https://docs.microsoft.com/en-us/azure/architecture/patterns/geodes) for global read-access to selected SAP data.
 
 Find the related blog on the SAP community [here]().
 
-Find the related Azure DevOps project for CI/CD [here](https://dev.azure.com/mapankra/CosmosDB%20OData%20SAP%20umbrella).
+Find the related public Azure DevOps project for CI/CD [here](https://dev.azure.com/mapankra/CosmosDB%20OData%20SAP%20umbrella).
 
 ![geode](images/geode-pattern.png)
 _Fig.1 architecture overview_
 
 ## High-level Prerequisites to replicate our blue print
 
-Our implementation creates a fully functional solution of the geode pattern tested from ECC and S4. The approach is standardized, so that all components could be replaced.
+Our implementation creates a fully functional solution of the geode pattern tested from ECC and S4. The approach is standardized, so that all components could be replaced as long as the runtime environment for the application stays .NET 5. To replicate our particular setup you will need:
 
 - Azure account with subscription and rights to deploy Azure CosmosDB and App Service in two regions
 - Azure AD authorization to configure app registration and potentially give admin consent initially
 - SAP on Azure with private VNet connectivity or routing from private VNet to SAP on-premise
 - SAP BTP account with Business Application Studio, Destination configured and Fiori Launchpad service to host HTML5 app
-- Access to SE80 on SAP backend to upload Z-Programm for data extraction HTTP Post via ABAP.
+- Access to SE80 on SAP backend to upload [Z-Programm](ZDemoFrontDoorReport.abap) for data extraction HTTP Post via ABAP.
 
 ## Deployment Guide
 All deployments could be done via scripting and CI/CD. For simple reproduction find below the manual steps:
@@ -67,7 +68,7 @@ Wait for provisioning to finish.
 - Configuration -> Add app setting "WEBSITE_VNET_ROUTE_ALL" with value 1. This ensures that all traffic leaving app service stays on the private VNet, so that it will use the private endpoint of CosmosDB. Otherwise you will see Firewall hits on Cosmos.
 </details>
 
-### FrontDoor
+### FrontDoor (global routing based on geo and availability)
 <details>
 <summary>click to expand</summary>
 
@@ -96,13 +97,22 @@ Once provisioned pickup Frontend host URL for SAP BTP Destination setup later on
 
 - Create an ABAP program on SE80 based on the code in [ZDemoFrontDoorReport.abap](ZDemoFrontDoorReport.abap). It will leverage the popular demo data set SFlight.
 
-I highly recommend checking the API calls through Postman first, because the http log on the SAP app server can be tedious.
+*Note:*
+I highly recommend checking the API calls through Postman first, because the http log on the SAP app server can be tedious. If you need to troubleshoot on SAP you would need to activate http trace info on SMICM, lock your work process on SAPGUI through SE38 (RSTRC000), navigate within that same session to SE80, trigger your progamm, go back to RSTRC000 and release your workpress and finally check the trace file on ST11 for your previously locked work process number.
 
 </details>
 
-### Azure AD
+### Azure AD (app registration for secure authentication)
 <details>
 <summary>click to expand</summary>
+
+For simplicity we are configuring the OAuth2 Client Credentials Grant flow. Of course, you could adapt this to any other SAP CloudFoundry Destination supported flow, or replace the need for destination through SAP Cloud SDK or even other apps that integrate with Azure AD like SAP Identity Authentication Service etc.
+
+- Create a new app registration to secure the Cosmos OData shim API exposed by Azure App Service.
+- Overview -> note down the application (client) id, AAD tenant id, application ID URI for your appsettings.json locally, Postman requests and App Service environment variables
+- Manage -> Certificate & Secrets -> Generate a secret and note it down (visible only once)
+- Manage -> App roles -> Add Sflight (Allows access to Sfligh objects), add Reader (Allow app to read from Cosmos) and add Writer (Allow access to write to Cosmos). Those roles are refrenced on the [code](GenericODataWebAPI/Controllers/SflightController.cs)
+- Manage -> API permissions -> Add permissions for just created roles and give admin consent. In case admin consent is hard to get and you are in a trial or PoC scenario, you could use a [free Azure subscription](https://azure.microsoft.com/free/) and register your app with that AAD even though the resources actually run in another subscription. Delegated permissions might get you around admin consent too, but require a more complex setup.
 
 </details>
 
@@ -110,19 +120,25 @@ I highly recommend checking the API calls through Postman first, because the htt
 <details>
 <summary>click to expand</summary>
 
-- Create a destination named "AzureCosmosDB" on subaccount level on your BTP cockpit (in our case one for west europe and for west us)
-- URL -> [your FrontDoor domain].azurefd.net
-- Proxy Type -> Internet
-- Authentication -> OAuth2ClientCredentials
-- Client ID -> api://[Your app registration id in AAD]
-- Client Secret -> the secret you generated in your app registration
-- Token Service URL -> https://login.microsoftonline.com/[your AAD tenant id]/oauth2/v2.0/token
+Create a destination named "AzureCosmosDB" on subaccount level on your BTP cockpit (in our case one for west europe and for west us)
+
+Property | Value
+--- | --- 
+`URL` | [your FrontDoor domain].azurefd.net
+`Proxy Type` | Internet
+`Authentication` | OAuth2ClientCredentials
+`Client ID` | api://[Your app registration id in AAD]
+`Client Secret` | the secret you generated in your app registration
+`Token Service URL` | https://login.microsoftonline.com/[your AAD tenant id]/oauth2/v2.0/token
+
 
 #### Additional Properties
-- Add HTML5.DynamicDestination with value true
-- Add scope with value "Your app registration id in AAD" (same as Client ID)
-- Add WebIDEEnabled with value true
-- Add WebIDEUsage with value odata_abap
+Property | Value
+--- | --- 
+`HTML5.DynamicDestination` | value true
+`scope` | "Your app registration id in AAD" (same as Client ID) **without** "api://" at the beginning **and** with suffix `/.default` at the end.
+`WebIDEEnabled` | true
+`WebIDEUsage` | odata_abap
 
 </details>
 
@@ -139,9 +155,37 @@ Find the source for the consuming SAPUI5 app [here](https://github.com/MartinPan
 
 </details>
 
-### Postman config to test OData API
+## Postman config to test OData API
 
-### Publish OData API to Azure App service
+For developer convenience we provide a Postman environment and collection in the [Templates folder](Templates).
 
+Fill the details you collected from your app registration on AAD on the environment and pay attention to the difference between client_id and scope. They use the same id but have different prefix and suffix. We didn't provide fixed values for the prefix, because they can be altered by you during creation on Azure.
 
-Feel free to reach out in case of any question over GitHub Issues :-)
+![pm-env](images/pm-env.png)
+
+![pm-collection](images/pm-collection.png)
+
+The **Tests** tab writes the env variable bearerToken, which is used for all calls in the collection, that require authentication.
+
+Public interfaces are:
+
+- /health
+- /api/geode
+- /api/odata/$metadata
+- /api/odata?$metadata
+
+Protected interfaces are:
+
+- /api/odata/*
+
+## Publish OData API to Azure App service
+
+For developer convenience we added a [publish.bat](publish.bat) file that builds your project and uploads the content to your app service.
+```
+.\publish.bat [your resource group] [name of app service]
+```
+You need Azure CLI setup for Powershell and an open session (az login) or install/configure Azure extension for Visual Studio Code for integrated experience. I would recommend the latter ;-)
+
+# Final words
+
+Feel free to reach out over GitHub Issues in case of any questions :-) Until then happy integrating

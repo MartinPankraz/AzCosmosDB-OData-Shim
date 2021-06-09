@@ -1,14 +1,15 @@
 *&---------------------------------------------------------------------*
-*& Report  ZADF_DEMO_AZURE_FRONTDOOR
+*& Report  ZSFLIGHT_DEMO_AZURE_FRONTDOOR
 *&
 *&---------------------------------------------------------------------*
 **---------------Prerequisite------------------------------------------*
-** *
-** *
+** * Destination for AAD and FrontDoor configured
 **---------------------------------------------------------------------*
-** 1.Create your ...*
+** 1.Request a Bearer token from Azure AD for subsequent REST calls.
+** 2.Creates an entry based on SQL filter on SFlight data set in CosmosDB
+**   via POST request
 *&---------------------------------------------------------------------*
-REPORT ZADF_DEMO_AZURE_FRONTDOOR.
+REPORT ZSFLIGHT_DEMO_AZURE_FRONTDOOR.
 
 TYPES: BEGIN OF lty_data,
          id        TYPE    s_carr_id,
@@ -53,9 +54,10 @@ SELECT  connid carrid connid fldate planetype SEATSMAX SEATSOCC
         FROM sflight
         INTO TABLE it_data
         WHERE connid = 64 AND fldate = '20210813'.
-
+*create JSON from table structure
     lv1_string = /ui2/cl_json=>serialize( data = it_data compress = abap_false pretty_name = /ui2/cl_json=>pretty_mode-camel_case ).
     W_LEN = STRLEN( lv1_string ) - 2.
+*unpack json array to avoid conflict when POSTing
     lv1_string = lv1_string+1(W_LEN).
 
 IF sy-subrc EQ 0.
@@ -65,7 +67,7 @@ IF sy-subrc EQ 0.
   TRY.
 
     wa_params-name = 'scope'.
-    wa_params-value =  '<your scope>'.
+    wa_params-value =  '<your scope>/.default'.
     APPEND wa_params TO it_params.
     CLEAR wa_params.
     wa_params-name = 'client_id'.
@@ -86,9 +88,9 @@ IF sy-subrc EQ 0.
 
     cl_http_client=>create_by_destination(
       EXPORTING
-        destination              = lv_AAD_dest    " Logical destination (specified in function call)
+        destination              = lv_AAD_dest    
       IMPORTING
-        client                   = lo_http_client    " HTTP Client Abstraction
+        client                   = lo_http_client 
       EXCEPTIONS
         argument_not_found       = 1
         destination_not_found    = 2
@@ -114,7 +116,7 @@ IF sy-subrc EQ 0.
 
         lo_response = lo_rest_client->if_rest_client~get_response_entity( ).
         json_response = lo_response->get_string_data( ).
-*Make array for json parser logic
+*Make array for ABAP json parser logic
         CONCATENATE '[' json_response ']' into json_response.
 
 * Get access token from JSON payload
@@ -149,8 +151,8 @@ IF sy-subrc EQ 0.
       IF lo_http_client IS BOUND AND lo_rest_client IS BOUND.
         cl_http_utility=>set_request_uri(
           EXPORTING
-            request = lo_http_client->request    " HTTP Framework (iHTTP) HTTP Request
-            uri     = lv_url                     " URI String (in the Form of /path?query-string)
+            request = lo_http_client->request    
+            uri     = lv_url                     
         ).
 
         lo_request = lo_rest_client->if_rest_client~create_request_entity( ).
