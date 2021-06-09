@@ -144,9 +144,10 @@ Property | Value
 
 </details>
 
-### SAP BTP HTML5 App (source in second repos)
+### SAP BTP HTML5 App ([source in second repos](https://github.com/MartinPankraz/SAPUI5-CosmosDB-umbrella))
 <details>
 <summary>click to expand</summary>
+
 Find the source for the consuming SAPUI5 app [here](https://github.com/MartinPankraz/SAPUI5-CosmosDB-umbrella).
 
 - clone from GitHub and run in Business Application Studio with npm start or right click the webapp folder -> preview application
