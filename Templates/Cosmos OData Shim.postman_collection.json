@@ -307,7 +307,7 @@
 						},
 						{
 							"key": "scope",
-							"value": "{{scope}}",
+							"value": "{{scope}}/.default",
 							"type": "text"
 						},
 						{
@@ -335,6 +335,63 @@
 						"oauth2",
 						"v2.0",
 						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BATCH request",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bearerToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "multipart/mixed; boundary=batch_id-1623334015383-78",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "multipart/mixed",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "--batch_id-1623334015383-78\r\nContent-Type:application/http\r\nContent-Transfer-Encoding:binary\r\n\r\nGET Sflight?$count=true&$select=id&$skip=0&$top=30 HTTP/1.1\r\nAccept:application/json;odata.metadata=minimal;IEEE754Compatible=true\r\nAccept-Language:en\r\nContent-Type:application/json;charset=UTF-8;IEEE754Compatible=true\r\n\r\n\r\n--batch_id-1623334015383-78--\r\nGroup ID: $auto.Workers",
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/odata/$batch",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"odata",
+						"$batch"
 					]
 				}
 			},
