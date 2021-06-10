@@ -9,7 +9,6 @@ Find our public Azure DevOps project for some inspiration on the CI/CD aspect of
 We implemented a simple CI/CD process with classic pipelines. We would recommend to code them in YAML usually, but for a simple entry into this topic we stuck to the more visually "speaking" classic flavor of it.
 
 ![geode](images/geode-pattern.png)
-_Fig.1 architecture overview_
 
 ## High-level Prerequisites to replicate our blue print
 
@@ -50,6 +49,17 @@ Wait for provisioning to finish.
 - Firewall and virtual networks -> familiarize with settings to understand connectivity issues going forward. Allow access from Azure Portal and possibly from your admin ip to begin with. Ultimately your VPN or ExpressRoute connection should be leveraged over your private Azure VNet. In our case we are communication over a P2S VPN with Azure.
 - Private Endpoint Connections -> Add a private endpoint for each private VNet in each region, where you are running Cosmos. Meaning you would need additional VNets to achieve private routing.
 - Keys -> note down the primary key and URI for your appsettings.json.
+
+#### Hosts file settings for local development
+Since you protected your CosmosDB via its built-in firewall, private VNet and potentially a VPN, you need to make sure that you can reach it from your dev environment. In my case I added two entries to my hosts file (C:\Windows\System32\drivers\etc\hosts) to resolve the private endpoints on Azure from my P2S VPN connection.
+
+```
+10.---.--.14 sap-cosmos-sql.privatelink.documents.azure.com sap-cosmos-sql.documents.azure.com
+10.---.--.15 sap-cosmos-sql-westeurope.privatelink.documents.azure.com sap-cosmos-sql-westeurope.documents.azure.com
+```
+You can collect your specific values from the generated Azure Private DNS Zone, that was created when you configured your private endpoints.
+
+![dns](images/dns.png)
 </details>
 
 ### Azure App Service (Create at least 2 Web Apps)
@@ -180,6 +190,8 @@ Public interfaces are:
 Protected interfaces are:
 
 - /api/odata/*
+
+Consider [tweaking](https://docs.microsoft.com/en-us/odata/webapi/batch) the OData batch configuration on the [Startup.cs](GenericODataWebAPI/Startup.cs) depending on your requirements.
 
 ## Publish OData API to Azure App service
 

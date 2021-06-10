@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
+using Microsoft.AspNet.OData.Batch;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -56,7 +57,7 @@ namespace GenericODataWebAPI
         {
             // If we do this in the request we can look for the x-forwarded for header.
             // OR give configuration manual control like we have done here. YMMV
-            app.UseRequestRewriter(new RequestRewriterOptions(new List<string>(){$"{System.Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME")}.azurewebsites.net"},System.Environment.GetEnvironmentVariable("RewriteModule:NewRoute")));
+            //app.UseRequestRewriter(new RequestRewriterOptions(new List<string>(){$"{System.Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME")}.azurewebsites.net"},System.Environment.GetEnvironmentVariable("RewriteModule:NewRoute")));
 
             if (env.IsDevelopment())
             {
@@ -65,7 +66,7 @@ namespace GenericODataWebAPI
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
+            app.UseODataBatching();
             app.UseRouting();
 
             app.UseAuthentication();
@@ -76,7 +77,18 @@ namespace GenericODataWebAPI
                 endpoints.MapControllers();
                 endpoints.EnableDependencyInjection();
                 endpoints.Select().Filter().OrderBy().Count().MaxTop(100);
-                endpoints.MapODataRoute("odata", "api/odata", GetEdmModel());
+
+                /*consider tweaking the batch quota depending on your requirements!*/
+                var odataBatchHandler  = new DefaultODataBatchHandler();
+                odataBatchHandler .MessageQuotas.MaxNestingDepth = 2;
+                odataBatchHandler .MessageQuotas.MaxOperationsPerChangeset = 10;
+                odataBatchHandler .MessageQuotas.MaxReceivedMessageSize = 100;
+
+                endpoints.MapODataRoute(
+                    routeName: "odata",
+                    routePrefix: "api/odata",
+                    model: GetEdmModel(),
+                    batchHandler: odataBatchHandler );
 
                 endpoints.MapHealthChecks("/health");
             });
