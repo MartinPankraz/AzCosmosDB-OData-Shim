@@ -7,7 +7,7 @@ Additional Resources |
 [blog on the SAP community](https://blogs.sap.com/2021/06/11/sap-where-can-i-get-toilet-paper-an-implementation-of-the-geodes-pattern-with-s4-btp-and-azure-cosmosdb/) |
 [SAPUI5 freestyle client app](https://github.com/MartinPankraz/SAPUI5-CosmosDB-umbrella) |
 [SAP CAP app (beta)](https://github.com/MartinPankraz/sap-cap-cosmos-app) |
-[CI/CD pipelines on AzDevOps](https://dev.azure.com/mapankra/CosmosDB%20OData%20SAP%20umbrella)
+[CI/CD pipelines on AzDevOps](https://dev.azure.com/mapankra/CosmosDB%20OData%20SAP%20umbrella) |
 <br>
 
 We implemented a simple CI/CD process with classic pipelines. We would recommend to code them in YAML usually, but for a simple entry into this topic we stuck to the more visually "speaking" classic flavor of it.
