@@ -1,10 +1,14 @@
 # AzCosmosDB-OData-Shim
 
-Project to connect consumers like SAP Business Technology Platform apps/services via OData with Azure CosmosDB. Furthermore it enables the [geode-pattern](https://docs.microsoft.com/en-us/azure/architecture/patterns/geodes) for global read-access to selected SAP data.
+Project to connect consumers like SAP Business Technology Platform apps/services via OData with Azure CosmosDB. Furthermore it enables the [geodes-pattern](https://docs.microsoft.com/en-us/azure/architecture/patterns/geodes) for scalable global read-access to selected SAP data.
 
-Find the related blog on the SAP community [here](https://blogs.sap.com/2021/06/11/sap-where-can-i-get-toilet-paper-an-implementation-of-the-geodes-pattern-with-s4-btp-and-azure-cosmosdb/).
-
-Find our public Azure DevOps project for some inspiration on the CI/CD aspect of the solution [here](https://dev.azure.com/mapankra/CosmosDB%20OData%20SAP%20umbrella).
+Additional Resources |
+--- |
+[blog on the SAP community](https://blogs.sap.com/2021/06/11/sap-where-can-i-get-toilet-paper-an-implementation-of-the-geodes-pattern-with-s4-btp-and-azure-cosmosdb/) |
+[SAPUI5 freestyle client app](https://github.com/MartinPankraz/SAPUI5-CosmosDB-umbrella) |
+[SAP CAP app (beta)](https://github.com/MartinPankraz/sap-cap-cosmos-app) |
+[CI/CD pipelines on AzDevOps](https://dev.azure.com/mapankra/CosmosDB%20OData%20SAP%20umbrella)
+<br>
 
 We implemented a simple CI/CD process with classic pipelines. We would recommend to code them in YAML usually, but for a simple entry into this topic we stuck to the more visually "speaking" classic flavor of it.
 
