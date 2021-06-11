@@ -50,7 +50,7 @@ Connect to 5s</stringProp>
           <collectionProp name="HeaderManager.headers">
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Authorization</stringProp>
-              <stringProp name="Header.value">Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Im5PbzNaRHJPRFhFSzFqS1doWHNsSFJfS1hFZyJ9.eyJhdWQiOiIwMGYxMDMxMi01NWEzLTQ1ZjAtOGM2MC05YTFmZmI5YTc0YmQiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vNmVhYTQ3ZGMtNWY3NC00NzBmLWE0MGUtMjRhNDk3MDM3ZmY0L3YyLjAiLCJpYXQiOjE2MjM0MTE4OTQsIm5iZiI6MTYyMzQxMTg5NCwiZXhwIjoxNjIzNDE1Nzk0LCJhaW8iOiJFMlpnWUZCY2VYZHFyK2V2djFwZldmZkVQK25tQVFBPSIsImF6cCI6IjAwZjEwMzEyLTU1YTMtNDVmMC04YzYwLTlhMWZmYjlhNzRiZCIsImF6cGFjciI6IjEiLCJvaWQiOiI3ZTBmZWQ2MS00M2U4LTRkZWMtYmU0Ni1iYzkzYjUyNzQ3NDQiLCJyaCI6IjAuQVRFQTNFZXFiblJmRDBla0RpU2tsd05fOUJJRDhRQ2pWZkJGakdDYUhfdWFkTDB4QUFBLiIsInJvbGVzIjpbIldyaXRlciIsIlNmbGlnaHQiLCJSZWFkZXIiXSwic3ViIjoiN2UwZmVkNjEtNDNlOC00ZGVjLWJlNDYtYmM5M2I1Mjc0NzQ0IiwidGlkIjoiNmVhYTQ3ZGMtNWY3NC00NzBmLWE0MGUtMjRhNDk3MDM3ZmY0IiwidXRpIjoiVGVJTTF5OUZ3VVNLdm9iVTBzTTJBQSIsInZlciI6IjIuMCJ9.TYYkzemXOXA8w6K_pFn0o7SGoCn27amqyCpCsCEq7s6ptpOF-HWPUntk159OBwYvdBIxDOCKvgc46zTe-A50Z4Jmjt83iCPTbuV7ZBW0-oKLQK-clwyijVdTRh0DOorDG7XOVDJAAkOoswmFktqAuKrEbXNJOZmbzCI9c8f6b1K1WNSDi3pIIygwcxDDoCVfbzimORGfJSpnOkybs4rYjRHj4D_wcM7MzS2T4xoa0_tFg4iPdnPoO6WfDZc_sTjh2gUwFz-KkC_2XK0JhoactF6AaVVRp2tugsDY8nQZM32NZ-VkrJO3OahbbaLGWjJ7Qbw2vd3lJuPkRKAEewiG7g</stringProp>
+              <stringProp name="Header.value">Bearer </stringProp>
             </elementProp>
           </collectionProp>
         </HeaderManager>
