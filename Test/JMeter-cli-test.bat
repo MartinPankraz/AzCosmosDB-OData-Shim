@@ -1,0 +1,2 @@
+cd C:\Users\mapankra\Desktop\apache-jmeter-5.4.1\bin
+jmeter -n -t "C:\Users\mapankra\Desktop\GitHub Repos\AzCosmosDB-OData-Shim\Test\OData-web-api-test-plan.jmx" -l "C:\Users\mapankra\Desktop\GitHub Repos\AzCosmosDB-OData-Shim\Test\test_results.csv" -e -o "C:\Users\mapankra\Desktop\GitHub Repos\AzCosmosDB-OData-Shim\Test\Output" -f
