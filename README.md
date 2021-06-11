@@ -2,7 +2,7 @@
 
 Project to connect consumers like SAP Business Technology Platform apps/services via OData with Azure CosmosDB. Furthermore it enables the [geode-pattern](https://docs.microsoft.com/en-us/azure/architecture/patterns/geodes) for global read-access to selected SAP data.
 
-Find the related blog on the SAP community [here]().
+Find the related blog on the SAP community [here](https://blogs.sap.com/2021/06/11/sap-where-can-i-get-toilet-paper-an-implementation-of-the-geodes-pattern-with-s4-btp-and-azure-cosmosdb/).
 
 Find our public Azure DevOps project for some inspiration on the CI/CD aspect of the solution [here](https://dev.azure.com/mapankra/CosmosDB%20OData%20SAP%20umbrella).
 
