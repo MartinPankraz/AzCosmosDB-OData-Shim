@@ -80,8 +80,25 @@ You can collect your specific values from the generated Azure Private DNS Zone, 
 - Essentials -> Health Check -> Enable and put path `/health`
 ##### Settings
 - Networking -> Configure VNet integration with the related VNets where Cosmos private endpoints sit. Be aware you will need enough space for an additional empty subnet.
-- Configuration -> Add app setting **geode-name** and put the location name where your app service runs (e.g europe or west us). We will use it later on for our geode service to be able to trace-back easily from where our requests were served
-- Configuration -> Add app setting **WEBSITE_VNET_ROUTE_ALL** with value **1**. This ensures that all traffic leaving app service stays on the private VNet, so that it will use the private endpoint of CosmosDB. Otherwise you will see Firewall hits on Cosmos.
+
+For the additional app settings you might want to consider to apply [ARM templates](https://docs.microsoft.com/de-de/azure/templates/microsoft.web/sites/config-appsettings?tabs=json) and [CI/CD](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/add-template-to-azure-pipelines) for transparent and consisten rollout. To get started with only a few instances doing it manually will suffice.
+
+App Setting | Value
+--- | --- 
+geode-name | your location
+WEBSITE_VNET_ROUTE_ALL | 1
+Modules:CosmosConfig:CollectionId | sflight
+Modules:CosmosConfig:DatabaseId | saps4
+Modules:CosmosConfig:Endpoint | https://[your domain].documents.azure.com:443/
+Modules:CosmosConfig:Key | your cosmos primary key
+RewriteModule:NewRoute | rewrite route to map odata context from app service to front door
+AzureAd:Audience | your AAD app registration client id
+AzureAd:ClientId | your AAD app registration client id
+AzureAd:Instance | https://login.microsoftonline.com/
+AzureAd:TenantId | your AAD tenant id
+
+The **geode-name** will be used to be able to trace-back easily from where our requests were served. The routing param ensures that all traffic leaving app service stays on the private VNet, so that it will use the private endpoint of CosmosDB. Otherwise you will see Firewall hits on Cosmos.
+
 </details>
 
 ### FrontDoor (global routing based on geo and availability)
