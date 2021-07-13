@@ -1,12 +1,15 @@
 # AzCosmosDB-OData-Shim
 
+[![Build status](https://dev.azure.com/mapankra/CosmosDB%20OData%20SAP%20umbrella/_apis/build/status/Build%20OData%20Shim)](https://dev.azure.com/mapankra/CosmosDB%20OData%20SAP%20umbrella/_build/latest?definitionId=14)
+[![Build status](https://vsrm.dev.azure.com/mapankra/_apis/public/Release/badge/cf76d14c-d6ac-4c79-90d3-5c289a7b68c2/2/3)](https://dev.azure.com/mapankra/CosmosDB%20OData%20SAP%20umbrella/_release/latest?definitionId=1)
+
 Project to connect consumers like SAP Business Technology Platform apps/services via OData with Azure CosmosDB. Furthermore it enables the [geodes-pattern](https://docs.microsoft.com/en-us/azure/architecture/patterns/geodes) for scalable global read-access to selected SAP data.
 
 Additional Resources |
 --- |
 [blog on the SAP community](https://blogs.sap.com/2021/06/11/sap-where-can-i-get-toilet-paper-an-implementation-of-the-geodes-pattern-with-s4-btp-and-azure-cosmosdb/) |
 [SAPUI5 freestyle client app](https://github.com/MartinPankraz/SAPUI5-CosmosDB-umbrella) |
-[SAP CAP app (beta)](https://github.com/MartinPankraz/sap-cap-cosmos-app) |
+[SAP CAP app](https://github.com/MartinPankraz/sap-cap-cosmos-app) |
 [CI/CD pipelines on AzDevOps](https://dev.azure.com/mapankra/CosmosDB%20OData%20SAP%20umbrella) |
 <br>
 
