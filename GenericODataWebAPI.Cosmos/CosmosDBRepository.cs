@@ -64,26 +64,26 @@
             return Ts;
         }
         
-        public async Task<string> CreateItemAsync(T item)
+        public async Task<T> CreateItemAsync(T item)
         {
             ItemResponse<T> response = await container.CreateItemAsync(item, new PartitionKey(item.id));
-            return response.ETag;
+            return response;
         }
 
-        public async Task<string> UpdateItemAsync(string id, T item)
+        public async Task<T> UpdateItemAsync(string id, T item)
         {
             ItemResponse<T> response = await container.UpsertItemAsync(item, new PartitionKey(item.id));
-            return response.ETag;
+            return response;
         }
 
-        public async Task<string> PatchItemAsync(string id, Delta<T> item)
+        public async Task<T> PatchItemAsync(string id, Delta<T> item)
         {
             ItemResponse<T> existingItem = await container.ReadItemAsync<T>(partitionKey: new PartitionKey(id), id: id);
             T existingObject = existingItem.Resource;
             //apply delta to existing resource
             item.CopyChangedValues(existingObject);
             ItemResponse<T> response = await container.UpsertItemAsync(existingObject, new PartitionKey(id));
-            return response.ETag;
+            return response;
         }
 
         public async Task DeleteItemAsync(string id)

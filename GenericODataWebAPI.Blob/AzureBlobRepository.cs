@@ -19,7 +19,7 @@ namespace GenericODataWebAPI.Blob
             // bc1 = bc;
         }
 
-        public async Task<string> CreateItemAsync(T item)
+        public async Task<T> CreateItemAsync(T item)
         {
             throw new NotImplementedException();
         }
@@ -40,12 +40,12 @@ namespace GenericODataWebAPI.Blob
             throw new NotImplementedException();
         }
 
-        public async Task<string> UpdateItemAsync(string id, T item)
+        public async Task<T> UpdateItemAsync(string id, T item)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<string> PatchItemAsync(string id, Delta<T> item)
+        public async Task<T> PatchItemAsync(string id, Delta<T> item)
         {
             throw new NotImplementedException();
         }

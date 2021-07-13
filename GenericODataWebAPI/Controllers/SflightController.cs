@@ -37,21 +37,21 @@ namespace GenericODataWebAPI.Controllers
 
         [EnableQuery]
         [Authorize(Roles = "Writer")]
-        public async Task<string> Post([FromBody]Sflight flight)
+        public async Task<Sflight> Post([FromBody]Sflight flight)
         {
             return await Repository.UpdateItemAsync(flight.id, flight);
         }
         
         [EnableQuery]
         [Authorize(Roles = "Writer")]
-        public async Task<string> Put(string key, [FromBody]Sflight flight)
+        public async Task<Sflight> Put(string key, [FromBody]Sflight flight)
         {
             return await Repository.UpdateItemAsync(key, flight);
         }
 
         [EnableQuery]
         [Authorize(Roles = "Writer")]
-        public async Task<string> Patch(string key, Delta<Sflight> flight)
+        public async Task<Sflight> Patch(string key, Delta<Sflight> flight)
         {
             return await Repository.PatchItemAsync(key, flight);
         }
