@@ -18,6 +18,18 @@ SAP backends on Azure typically run in fully isolated virtual networks. There ar
 
 VNet integration enables your app to securely access resources in your VNet, such as your SAP Gateway, but doesn't block public access to your App Service. To achieve full private connectivity for the app service too, look into private endpoints.
 
+## Load tests
+
+We performed a simple load test with [Apache JMeter](https://jmeter.apache.org/) on app service (scale out to 10 instance) with [SKU](https://docs.microsoft.com/azure/app-service/overview-hosting-plans) **S1 (100ACU, 1.75GB RAM)** per region. CosmosDB was left on default Throughput (autoscale) with a max RU/s of 4000. We provided JMeter with 32GB RAM to be able to sustain the 10k threads. The process ran on a VM (E8-4ds_v4, 4 vcpus, 64 GiB memory) in Azure West-US. So, the requests go to the US based geodes until FrontDoor decides to re-route to europe.
+
+JMeter was configured to perform the GET `/api/odata/Sflight` with 10k threads in parallel for a duration of 60 seconds. We re-ran the process for 3 times while waiting for 5mins in between. Over the course of this analysis an average of 0.1% of requests failed with http 503 while the second run even completed 100% successful. Meaning we are likely close to the maximum simultaneous load capacity for this setup.
+
+You can check the results dashboard on the output [folder](Test/Output/index.html).
+
+We left the [batch file](Test/JMeter-cli-test.bat) for you so you can replicate the test or easily come up with a more sophisticated load-testing logic.
+
+In order to scale further we would now need to increase the app service SKU.
+
 ## DevOps 👩🏾‍💻
 
 * Consider activating GitHub Actions for your Azure project for out-of-the-box integrated CI/CD flows. [Learn more](https://docs.microsoft.com/azure/app-service/deploy-github-actions?tabs=applevel)

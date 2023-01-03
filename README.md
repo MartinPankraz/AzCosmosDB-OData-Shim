@@ -28,7 +28,7 @@ This repos offers two flavours of deployment guidance supporting the associated 
 
 ## Postman config to test OData API
 
-For developer convenience we provide a Postman collection in the [Templates folder](Templates).
+For developer convenience we provide a [Postman collection](Templates/Cosmos-OData-Shim.postman_collection.json) in the [Templates folder](Templates).
 
 Fill the details you collected from your app registration on AAD on the environment and pay attention to the difference between client_id and scope. They use the same id but have different prefix and suffix. We didn't provide fixed values for the prefix, because they can be altered by you during creation on Azure.
 
@@ -50,17 +50,9 @@ Protected interfaces are:
 
 Consider [tweaking](https://docs.microsoft.com/odata/webapi/batch) the OData batch configuration on the [Startup.cs](GenericODataWebAPI/Startup.cs) depending on your requirements.
 
-## Load tests
+## What's next?
 
-We performed a simple load test with [Apache JMeter](https://jmeter.apache.org/) on app service (scale out to 10 instance) with [SKU](https://docs.microsoft.com/azure/app-service/overview-hosting-plans) **S1 (100ACU, 1.75GB RAM)** per region. CosmosDB was left on default Throughput (autoscale) with a max RU/s of 4000. We provided JMeter with 32GB RAM to be able to sustain the 10k threads. The process ran on a VM (E8-4ds_v4, 4 vcpus, 64 GiB memory) in Azure West-US. So, the requests go to the US based geodes until FrontDoor decides to re-route to europe.
-
-JMeter was configured to perform the GET `/api/odata/Sflight` with 10k threads in parallel for a duration of 60 seconds. We re-ran the process for 3 times while waiting for 5mins in between. Over the course of this analysis an average of 0.1% of requests failed with http 503 while the second run even completed 100% successful. Meaning we are likely close to the maximum simultaneous load capacity for this setup.
-
-You can check the results dashboard on the output [folder](Test/Output/index.html).
-
-We left the [batch file](Test/JMeter-cli-test.bat) for you so you can replicate the test or easily come up with a more sophisticated load-testing logic.
-
-In order to scale further we would now need to increase the app service SKU.
+You can do a lot more once the app is deployed. Curious? We go you covered with some more information [here](documentation/WHATS-NEXT.md)
 
 ## Final words
 
