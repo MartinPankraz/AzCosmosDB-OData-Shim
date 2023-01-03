@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "7fc26d6f-bbf1-461b-a3c0-74caf800e234",
 		"name": "Cosmos OData Shim",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8114323"
 	},
 	"item": [
 		{
@@ -11,12 +12,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost:5001/api/geode",
+					"raw": "https://{{localhost}}/api/geode",
 					"protocol": "https",
 					"host": [
-						"localhost"
+						"{{localhost}}"
 					],
-					"port": "5001",
 					"path": [
 						"api",
 						"geode"
@@ -31,12 +31,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost:5001/health",
+					"raw": "https://{{localhost}}/health",
 					"protocol": "https",
 					"host": [
-						"localhost"
+						"{{localhost}}"
 					],
-					"port": "5001",
 					"path": [
 						"health"
 					]
@@ -60,12 +59,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost:5001/api/odata/Sflight",
+					"raw": "https://{{localhost}}/api/odata/Sflight",
 					"protocol": "https",
 					"host": [
-						"localhost"
+						"{{localhost}}"
 					],
-					"port": "5001",
 					"path": [
 						"api",
 						"odata",
@@ -123,12 +121,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost:5001/api/odata/Sflight('006')",
+					"raw": "https://{{localhost}}/api/odata/Sflight('006')",
 					"protocol": "https",
 					"host": [
-						"localhost"
+						"{{localhost}}"
 					],
-					"port": "5001",
 					"path": [
 						"api",
 						"odata",
@@ -163,12 +160,11 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:5001/api/odata/Sflight('004')",
+					"raw": "https://{{localhost}}/api/odata/Sflight('004')",
 					"protocol": "https",
 					"host": [
-						"localhost"
+						"{{localhost}}"
 					],
-					"port": "5001",
 					"path": [
 						"api",
 						"odata",
@@ -203,12 +199,11 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:5001/api/odata/Sflight('006')",
+					"raw": "https://{{localhost}}/api/odata/Sflight('006')",
 					"protocol": "https",
 					"host": [
-						"localhost"
+						"{{localhost}}"
 					],
-					"port": "5001",
 					"path": [
 						"api",
 						"odata",
@@ -243,12 +238,11 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:5001/api/odata/Sflight",
+					"raw": "https://{{localhost}}/api/odata/Sflight",
 					"protocol": "https",
 					"host": [
-						"localhost"
+						"{{localhost}}"
 					],
-					"port": "5001",
 					"path": [
 						"api",
 						"odata",
@@ -281,7 +275,7 @@
 							"    else\r",
 							"    {\r",
 							"        var json = JSON.parse(responseBody);\r",
-							"        postman.setEnvironmentVariable(\"bearerToken\", json.access_token);\r",
+							"        postman.collectionVariables(\"bearerToken\", json.access_token);\r",
 							"    }\r",
 							"}\r",
 							"catch (e) {\r",
@@ -382,12 +376,11 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:5001/api/odata/$batch",
+					"raw": "https://{{localhost}}/api/odata/$batch",
 					"protocol": "https",
 					"host": [
-						"localhost"
+						"{{localhost}}"
 					],
-					"port": "5001",
 					"path": [
 						"api",
 						"odata",
@@ -396,6 +389,63 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "AAD tenant id",
+			"value": null,
+			"type": "string"
+		},
+		{
+			"key": "client_id",
+			"value": "api://",
+			"type": "string"
+		},
+		{
+			"key": "scope",
+			"value": null,
+			"type": "string"
+		},
+		{
+			"key": "client_secret",
+			"value": null,
+			"type": "string"
+		},
+		{
+			"key": "bearerToken",
+			"value": null,
+			"type": "string"
+		},
+		{
+			"key": "FrontDoor domain",
+			"value": null,
+			"type": "string"
+		},
+		{
+			"key": "localhost",
+			"value": "localhost:5000",
+			"type": "string"
 		}
 	]
 }
