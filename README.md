@@ -1,8 +1,5 @@
 # AzCosmosDB-OData-Shim
 
-[![Build status](https://dev.azure.com/mapankra/CosmosDB%20OData%20SAP%20umbrella/_apis/build/status/Build%20OData%20Shim)](https://dev.azure.com/mapankra/CosmosDB%20OData%20SAP%20umbrella/_build/latest?definitionId=14)
-[![Build status](https://vsrm.dev.azure.com/mapankra/_apis/public/Release/badge/cf76d14c-d6ac-4c79-90d3-5c289a7b68c2/2/3)](https://dev.azure.com/mapankra/CosmosDB%20OData%20SAP%20umbrella/_release/latest?definitionId=1)
-
 Project to connect consumers like apps/services hosted on **SAP Business Technology Platform** via OData with [Azure CosmosDB](https://learn.microsoft.com/azure/cosmos-db/introduction). Furthermore, it enables the [geodes-pattern](https://docs.microsoft.com/azure/architecture/patterns/geodes) for scalable global read-access to selected SAP data.
 
 Additional Resources |
@@ -12,8 +9,6 @@ Additional Resources |
 [SAP CAP app](https://github.com/MartinPankraz/sap-cap-cosmos-app) |
 [CI/CD pipelines on AzDevOps](https://dev.azure.com/mapankra/CosmosDB%20OData%20SAP%20umbrella) |
 <br>
-
-We implemented a simple CI/CD process with classic pipelines. We would recommend to code them in YAML usually, but for a simple entry into this topic we stuck to the more visually "speaking" classic flavor of it.
 
 ![geode](images/geode-pattern.png)
 
