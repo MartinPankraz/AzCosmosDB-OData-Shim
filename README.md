@@ -3,7 +3,7 @@
 [![Build status](https://dev.azure.com/mapankra/CosmosDB%20OData%20SAP%20umbrella/_apis/build/status/Build%20OData%20Shim)](https://dev.azure.com/mapankra/CosmosDB%20OData%20SAP%20umbrella/_build/latest?definitionId=14)
 [![Build status](https://vsrm.dev.azure.com/mapankra/_apis/public/Release/badge/cf76d14c-d6ac-4c79-90d3-5c289a7b68c2/2/3)](https://dev.azure.com/mapankra/CosmosDB%20OData%20SAP%20umbrella/_release/latest?definitionId=1)
 
-Project to connect consumers like SAP Business Technology Platform apps/services via OData with Azure CosmosDB. Furthermore it enables the [geodes-pattern](https://docs.microsoft.com/en-us/azure/architecture/patterns/geodes) for scalable global read-access to selected SAP data.
+Project to connect consumers like apps/services hosted on **SAP Business Technology Platform** via OData with [Azure CosmosDB](https://learn.microsoft.com/azure/cosmos-db/introduction). Furthermore, it enables the [geodes-pattern](https://docs.microsoft.com/azure/architecture/patterns/geodes) for scalable global read-access to selected SAP data.
 
 Additional Resources |
 --- |
@@ -19,7 +19,7 @@ We implemented a simple CI/CD process with classic pipelines. We would recommend
 
 ## High-level Prerequisites to replicate our blue print
 
-Our implementation creates a fully functional solution of the geode pattern tested from ECC and S4. The approach is standardized, so that all components could be replaced as long as the runtime environment for the application stays .NET 5. To replicate our particular setup you will need:
+Our implementation creates a fully functional solution of the geode pattern tested from ECC and S4. The approach is standardized, so that all components could be replaced as long as the runtime environment for the application stays .NET 6. To replicate our particular setup you will need:
 
 - Azure account with subscription and rights to deploy Azure CosmosDB and App Service in two regions
 - Azure AD authorization to configure app registration and potentially give admin consent initially
@@ -28,66 +28,83 @@ Our implementation creates a fully functional solution of the geode pattern test
 - Access to SE80 on SAP backend to upload [Z-Programm](ZDemoFrontDoorReport.abap) for data extraction HTTP Post via ABAP.
 
 ## Deployment Guide
+
 For step-by-step reproduction find the manual steps below.
 
 ### Azure CosmosDB
+
 <details>
 <summary>click to expand</summary>
 
 We need at least two instance of Cosmos to verify global access. We configure global read and primary region write to avoid concurrent locking challenges in our blue print. Going forward you might want to think about global write too. In our case SAP backend will always override what is in Cosmos if there is a race condition.
 
 Choose CosmosDB with Core SQL API
+
 #### Basics
+
 - Provide required fields and pay attention to your primary region choice.
 - Choose capacity mode Provisioned Throughput to allow multi-region setup
+
 #### Global Distribution
+
 - Keep Geo-Redundancy disabled (we will add regions later)
 - Multi-Region Writed disabled (check first section for reasoning)
+
 #### Networking (private VNet required)
+
 - Configure Private endpoint to make Cosmos only accessible from your private VNet that "knows" SAP
+
 #### Backup and Encryption
-- Configure as you wish. 
+
+- Configure as you wish.
 
 Wait for provisioning to finish.
 
 #### Configure Cosmos Settings
+
 - Replicate data globally -> add read regions as per your needs
 - Default Consistency -> Understand your consistency choice and its impact on global read
 - Firewall and virtual networks -> familiarize with settings to understand connectivity issues going forward. Allow access from Azure Portal and possibly from your admin ip to begin with. Ultimately your VPN or ExpressRoute connection should be leveraged over your private Azure VNet. In our case we are communication over a P2S VPN with Azure.
 - Private Endpoint Connections -> Add a private endpoint for each private VNet in each region, where you are running Cosmos. Meaning you would need additional VNets to achieve private routing.
-- Keys -> note down the primary key and URI for your appsettings.json.
+- Keys -> note down the primary key and URI for your `appsettings.json`.
 
 #### Hosts file settings for local development
+
 Since you protected your CosmosDB via its built-in firewall, private VNet and potentially a VPN, you need to make sure that you can reach it from your dev environment. In my case I added two entries to my hosts file (C:\Windows\System32\drivers\etc\hosts) to resolve the private endpoints on Azure from my P2S VPN connection.
 
-```
+```cmd
 10.---.--.14 sap-cosmos-sql.privatelink.documents.azure.com sap-cosmos-sql.documents.azure.com
 10.---.--.15 sap-cosmos-sql-westeurope.privatelink.documents.azure.com sap-cosmos-sql-westeurope.documents.azure.com
 ```
+
 You can collect your specific values from the generated Azure Private DNS Zone, that was created when you configured your private endpoints.
 
 ![dns](images/dns.png)
 </details>
 
 ### Azure App Service (Create at least 2 Web Apps)
+
 <details>
 <summary>click to expand</summary>
 
 - Instance Details -> Publish Code
-- Runtime Stack -> .Net 5
+- Runtime Stack -> .Net 6
 - OS according to your needs. We ran on Windows during our implementation.
 - Region -> match your CosmosDB instances (in our case West Europe and West US)
 - App Service Plan (SKU) -> can be anything that supports SSL (currently default B1 for instance)
 
 #### Configure App Service
+
 - Essentials -> Health Check -> Enable and put path `/health`
+
 ##### Settings
+
 - Networking -> Configure VNet integration with the related VNets where Cosmos private endpoints sit. Be aware you will need enough space for an additional empty subnet.
 
 For the additional app settings you might want to consider to apply [ARM templates](https://docs.microsoft.com/de-de/azure/templates/microsoft.web/sites/config-appsettings?tabs=json) and [CI/CD](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/add-template-to-azure-pipelines) for transparent and consisten rollout. To get started with only a few instances doing it manually will suffice.
 
 App Setting | Value
---- | --- 
+--- | ---
 geode-name | your location
 WEBSITE_VNET_ROUTE_ALL | 1
 Modules:CosmosConfig:CollectionId | sflight
@@ -105,6 +122,7 @@ The **geode-name** will be used to be able to trace-back easily from where our r
 </details>
 
 ### FrontDoor (global routing based on geo and availability)
+
 <details>
 <summary>click to expand</summary>
 
@@ -117,6 +135,7 @@ Once provisioned pickup Frontend host URL for SAP BTP Destination setup later on
 </details>
 
 ### SAP backend for data up-stream
+
 <details>
 <summary>click to expand</summary>
 
@@ -133,12 +152,13 @@ Once provisioned pickup Frontend host URL for SAP BTP Destination setup later on
 
 - Create an ABAP program on **SE80** based on the code in [ZDemoFrontDoorReport.abap](ZDemoFrontDoorReport.abap). It will leverage the popular demo data set SFlight.
 
-*Note:*
-I highly recommend checking the API calls through Postman first, because the http log on the SAP app server can be tedious. If you need to troubleshoot on SAP you would need to activate http trace info on SMICM, lock your work process on SAPGUI through SE38 (RSTRC000), navigate within that same session to SE80, trigger your progamm, go back to RSTRC000 and release your workpress and finally check the trace file on ST11 for your previously locked work process number.
+>**Note**
+> I highly recommend checking the API calls through a [REST client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) or Postman first, because the http log on the SAP app server can be tedious. If you need to troubleshoot on SAP you would need to activate http trace info on SMICM, lock your work process on SAPGUI through SE38 (RSTRC000), navigate within that same session to SE80, trigger your progamm, go back to RSTRC000 and release your workpress and finally check the trace file on ST11 for your previously locked work process number.
 
 </details>
 
 ### Azure AD (app registration for secure authentication)
+
 <details>
 <summary>click to expand</summary>
 
@@ -153,13 +173,14 @@ For simplicity we are configuring the OAuth2 Client Credentials Grant flow. Of c
 </details>
 
 ### SAP BTP Destination (one each region)
+
 <details>
 <summary>click to expand</summary>
 
 Create a destination named "AzureCosmosDB" on subaccount level on your BTP cockpit (in our case one for west europe and for west us)
 
 Property | Value
---- | --- 
+--- | ---
 `URL` | [your FrontDoor domain].azurefd.net
 `Proxy Type` | Internet
 `Authentication` | OAuth2ClientCredentials
@@ -167,8 +188,8 @@ Property | Value
 `Client Secret` | the secret you generated in your app registration
 `Token Service URL` | https://login.microsoftonline.com/[your AAD tenant id]/oauth2/v2.0/token
 
-
 #### Additional Properties
+
 Property | Value
 --- | --- 
 `HTML5.DynamicDestination` | value true
@@ -179,6 +200,7 @@ Property | Value
 </details>
 
 ### SAP BTP HTML5 App ([source in second repos](https://github.com/MartinPankraz/SAPUI5-CosmosDB-umbrella))
+
 <details>
 <summary>click to expand</summary>
 
@@ -209,7 +231,6 @@ Public interfaces are:
 - /health
 - /api/geode
 - /api/odata/$metadata
-- /api/odata?$metadata
 
 Protected interfaces are:
 
@@ -220,15 +241,18 @@ Consider [tweaking](https://docs.microsoft.com/en-us/odata/webapi/batch) the ODa
 ## Publish OData API to Azure App service
 
 For developer convenience we added a [publish.bat](publish.bat) file that builds your project and uploads the content to your app service.
-```
+
+```cmd
 .\publish.bat [your resource group] [name of app service]
 ```
+
 You need Azure CLI setup for Powershell and an open session (az login) or install/configure Azure extension for Visual Studio Code for integrated experience. I would recommend the latter ;-)
 
 ## Load tests
+
 We performed a simple load test with [Apache JMeter](https://jmeter.apache.org/) on app service (scale out to 10 instance) with [SKU](https://docs.microsoft.com/en-us/azure/app-service/overview-hosting-plans) **S1 (100ACU, 1.75GB RAM)** per region. CosmosDB was left on default Throughput (autoscale) with a max RU/s of 4000. We provided JMeter with 32GB RAM to be able to sustain the 10k threads. The process ran on a VM (E8-4ds_v4, 4 vcpus, 64 GiB memory) in Azure West-US. So, the requests go to the US based geodes until FrontDoor decides to re-route to europe.
 
-JMeter was configured to perform the GET /api/odata/Sflight with 10k threads in parallel for a duration of 60 seconds. We re-ran the process for 3 times while waiting for 5mins in between. Over the course of this analysis an average of 0.1% of requests failed with http 503 while the second run even completed 100% successful. Meaning we are likely close to the maximum simulataneous load capacity for this setup.
+JMeter was configured to perform the GET /api/odata/Sflight with 10k threads in parallel for a duration of 60 seconds. We re-ran the process for 3 times while waiting for 5mins in between. Over the course of this analysis an average of 0.1% of requests failed with http 503 while the second run even completed 100% successful. Meaning we are likely close to the maximum simultaneous load capacity for this setup.
 
 You can check the results dashboard on the output [folder](Test/Output/index.html).
 
@@ -236,6 +260,6 @@ We left the batch file for you so you can replicate the test or easily come up w
 
 In order to scale further we would now need to increase the app service SKU.
 
-# Final words
+## Final words
 
 Feel free to reach out over GitHub Issues in case of any questions :-) Until then happy integrating and enjoy reading your SAP data globally.
