@@ -23,6 +23,8 @@ Our implementation creates a fully functional solution. The approach is standard
 
 ### Quickstart 🚀
 
+Move [appsettings.json](Templates/appsettings.json) template to [root of GenericODataWebAPI](GenericODataWebAPI/) and maintain according to your environment. The 'appsettings.json' is ignored by git, so you can safely maintain your secrets in the file.
+
 ```bash
 cd GenericODataWebAPI
 dotnet run
