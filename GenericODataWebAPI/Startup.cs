@@ -35,6 +35,7 @@ namespace GenericODataWebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //uncomment to start using AAD
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddMicrosoftIdentityWebApi(Configuration, "AzureAd");
 
@@ -69,8 +70,9 @@ namespace GenericODataWebAPI
             app.UseODataBatching();
             app.UseRouting();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            //uncomment to start using AAD
+            //app.UseAuthentication();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -2,7 +2,9 @@
 
 ## Authentication with Azure AD 🔐
 
-[Configure](https://learn.microsoft.com/azure/app-service/configure-authentication-provider-aad) your App Service or Azure Functions app to use Azure AD login. Use standard variable `X-MS-TOKEN-AAD-ACCESS-TOKEN` to retrieve the access token from the request header. [Learn more](https://learn.microsoft.com/azure/app-service/configure-authentication-oauth-tokens#retrieve-tokens-in-app-code)
+This repos is setup to use code based Azure AD authentication. Check commented lines 74 onwards in [Startup.cs](GenericODataWebAPI/Startup.cs) to enable it. In addition to that uncomment 'Authorize annotations' in [SflightController.cs](../GenericODataWebAPI/Controllers/SflightController.cs).
+
+Alternatively to the code based approach, consider [outsourcing the config](https://learn.microsoft.com/azure/app-service/configure-authentication-provider-aad) to your App Service. Use standard variable `X-MS-TOKEN-AAD-ACCESS-TOKEN` to retrieve the access token from the request header. [Learn more](https://learn.microsoft.com/azure/app-service/configure-authentication-oauth-tokens#retrieve-tokens-in-app-code)
 
 Consider SAP Principal Propagation for your authentication scenario handled by [Azure API Management](https://learn.microsoft.com/azure/api-management/sap-api#production-considerations).
 

@@ -1,0 +1,18 @@
+GET http://localhost:52055/health HTTP/1.1
+content-type: application/json
+x-ms-token-aad-access-token: your-access-token-if-any
+
+### Check assigned geode. Configure in the appsettings.json file. If not configured, it will return the default geode.
+
+GET http://localhost:52055/api/geode HTTP/1.1
+content-type: application/json
+
+###
+
+GET http://localhost:52055/api/odata/$metadata HTTP/1.1
+content-type: application/json
+
+### Get flight info by id 6. Use sample
+
+GET http://localhost:52055/api/odata/Sflight('006') HTTP/1.1
+content-type: application/json

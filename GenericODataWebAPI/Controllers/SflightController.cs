@@ -10,7 +10,8 @@ using GenericODataWebAPI.Core;
 
 namespace GenericODataWebAPI.Controllers
 {
-    [Authorize(Roles = "Sflight")]
+    //uncomment to start using AAD
+    //[Authorize(Roles = "Sflight")]
     [ODataRouting]
     public class SflightController : ControllerBase
     {
@@ -21,7 +22,7 @@ namespace GenericODataWebAPI.Controllers
         }
         
         [EnableQuery]
-        [Authorize(Roles = "Reader")]
+        //[Authorize(Roles = "Reader")]
         public async Task<IEnumerable<Sflight>> Get()
         {
             return await Repository.GetItemsAsync();
@@ -29,35 +30,35 @@ namespace GenericODataWebAPI.Controllers
 
         
         [EnableQuery]
-        [Authorize(Roles = "Reader")]
+        //[Authorize(Roles = "Reader")]
         public async Task<Sflight> Get(string key)
         {
             return await Repository.GetItemAsync(key);       
         }
 
         [EnableQuery]
-        [Authorize(Roles = "Writer")]
+        //[Authorize(Roles = "Writer")]
         public async Task<Sflight> Post([FromBody]Sflight flight)
         {
             return await Repository.UpdateItemAsync(flight.id, flight);
         }
         
         [EnableQuery]
-        [Authorize(Roles = "Writer")]
+        //[Authorize(Roles = "Writer")]
         public async Task<Sflight> Put(string key, [FromBody]Sflight flight)
         {
             return await Repository.UpdateItemAsync(key, flight);
         }
 
         [EnableQuery]
-        [Authorize(Roles = "Writer")]
+        //[Authorize(Roles = "Writer")]
         public async Task<Sflight> Patch(string key, Delta<Sflight> flight)
         {
             return await Repository.PatchItemAsync(key, flight);
         }
 
         [EnableQuery]
-        [Authorize(Roles = "Writer")]
+        //[Authorize(Roles = "Writer")]
         public async Task Delete([FromODataUri]string key)
         {
             await Repository.DeleteItemAsync(key);
