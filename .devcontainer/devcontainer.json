@@ -3,7 +3,7 @@
 	"build": {
 		"dockerfile": "Dockerfile"
 	},
-	"forwardPorts": [ 5001 ],
+	"forwardPorts": [ 52055, 52056 ],
 
 	// Configure tool-specific properties.
 	"customizations": {
@@ -23,7 +23,7 @@
 	},
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "dotnet restore",
+	"postCreateCommand": "dotnet dev-certs https && dotnet dev-certs https --trust && cd GenericODataWebAPI",
 
 	// Set `remoteUser` to `root` to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "vscode",
@@ -36,6 +36,6 @@
 		},
 		"ghcr.io/devcontainers/features/github-cli:1": {
 			"version": "2"
-		},
+		}
 	}
 }
