@@ -1,0 +1,44 @@
+{
+	"name": "Azure App Service - .NET 6",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"args": {
+			"VARIANT": "bullseye"
+		}
+	},
+	"forwardPorts": [ 5001 ],
+
+	// Configure tool-specific properties.
+	"customizations": {
+		// Configure properties specific to VS Code.
+		"vscode": {
+			// Add the IDs of extensions you want installed when the container is created.
+			"extensions": [
+				"ms-dotnettools.csharp",
+				"humao.rest-client",
+				"ms-azuretools.vscode-azureappservice",
+				"ms-azuretools.azure-dev",
+				"ms-azuretools.vscode-bicep",
+				"ms-azuretools.vscode-docker",
+				"esbenp.prettier-vscode"
+			]
+		}
+	},
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "dotnet restore",
+
+	// Set `remoteUser` to `root` to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	"remoteUser": "vscode",
+	"features": {
+		"ghcr.io/devcontainers/features/azure-cli:1": {
+			"version": "2.38"
+		},
+		"ghcr.io/devcontainers/features/docker-from-docker:1": {
+			"version": "20.10"
+		},
+		"ghcr.io/devcontainers/features/github-cli:1": {
+			"version": "2"
+		},
+	}
+}
