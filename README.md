@@ -33,6 +33,8 @@ dotnet run
 - Navigate to [https://localhost:52055/health](https://localhost:52055/health) to check if the app is running.
 - Use [provided queries](sample-http-requests/sflight-requests.http) to test further with [VS Code REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client). Alternatively, find the Postman collection in the [Templates folder](Templates/Cosmos-OData-Shim.postman_collection.json).
 
+> **Note** - From within GitHub Codespaces, click the URL shown (https://localhost:52055) on the console output to navigate to the exposed domain and port. It will be something like https://<random-string>.preview.app.github.dev/health
+
 Public interfaces are:
 
 - /health
