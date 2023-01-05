@@ -78,7 +78,7 @@ namespace GenericODataWebAPI
             {
                 endpoints.MapControllers();
                 endpoints.EnableDependencyInjection();
-                endpoints.Select().Filter().OrderBy().Count().MaxTop(100);
+                endpoints.Select().Filter().OrderBy().Count().MaxTop(1000);
 
                 /*consider tweaking the batch quota depending on your requirements!*/
                 var odataBatchHandler  = new DefaultODataBatchHandler();
