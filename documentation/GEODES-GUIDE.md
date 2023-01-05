@@ -1,6 +1,6 @@
 # Geodes pattern for BTP apps powered by Azure CosmosDB
 
-![geode](images/geode-pattern.png)
+![geode](../images/geode-pattern.png)
 
 Associated Resources |
 --- |
