@@ -2,7 +2,7 @@
 
 In this example we use the [Azure App Service extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azureappservice) for VS Code to deploy the project. Learn more about [this process on Microsoft learn](https://learn.microsoft.com/training/modules/create-publish-webapp-app-service-vs-code/5-exercise-publish-app-azure-app-service-vs-code?pivots=nodeexpress).
 
-1. Create an Azure App Service with Dotnet 6 and Linux using the [VS Code extension for Azure](https://code.visualstudio.com/docs/azure/extensions) or use below deploy to Azure button.
+1. Create an Azure App Service with Dotnet 6 and Windows using the [VS Code extension for Azure](https://code.visualstudio.com/docs/azure/extensions) or the portal.
 2. Maintain or upload environment variables in the [Azure App Service configuration](https://learn.microsoft.com/azure/app-service/configure-common?tabs=portal#configure-app-settings) - just like you did for the `appsettings.json` file for local execution in the previous section.
 3. Deploy to Web App from VS Code or GitHub Codespaces
 
@@ -13,8 +13,6 @@ For developer convenience we added a [publish.bat](publish.bat) file that builds
 ```
 
 4. Browse your new OData shim for CosmosDB (it takes a while the first time).
-
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMartinPankraz%2FAzCosmosDB-OData-Shim%2Fmain%2FTemplates%2Fazuredeploy.json)
 
 ## Azure CosmosDB
 

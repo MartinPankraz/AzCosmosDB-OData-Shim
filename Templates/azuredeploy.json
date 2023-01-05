@@ -1,82 +1,119 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "metadata": {
-      "_generator": {
-        "name": "bicep",
-        "version": "0.12.40.16777",
-        "templateHash": "16004123048193185147"
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.12.40.16777",
+      "templateHash": "16004123048193185147"
+    }
+  },
+  "parameters": {
+    "webAppName": {
+      "type": "string",
+      "defaultValue": "[concat('cosmos-sap-odata-shim-', substring(uniqueString(resourceGroup().id),0,6))]",
+      "minLength": 2,
+      "metadata": {
+        "description": "Base name of the resource such as web app name and app service plan "
       }
     },
-    "parameters": {
-      "webAppName": {
-        "type": "string",
-        "defaultValue": "[concat('cosmos-sap-odata-shim-', substring(uniqueString(resourceGroup().id),0,6))]",
-        "minLength": 2,
-        "metadata": {
-          "description": "Base name of the resource such as web app name and app service plan "
-        }
-      },
+    "sku": {
+      "type": "string",
+      "defaultValue": "B1",
+      "metadata": {
+        "description": "The SKU of App Service Plan supporting Private Link"
+      }
+    },
+    "language": {
+      "type": "string",
+      "defaultValue": ".net",
+      "allowedValues": [
+        ".net"
+      ],
+      "metadata": {
+        "description": "The language stack of the app."
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    }
+  },
+  "variables": {
+    "webAppPortalName": "[format('{0}-webapp', parameters('webAppName'))]",
+    "appServicePlanName": "[format('AppServicePlan-{0}', parameters('webAppName'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2022-03-01",
+      "name": "[variables('appServicePlanName')]",
+      "location": "[parameters('location')]",
       "sku": {
-        "type": "string",
-        "defaultValue": "B1",
-        "metadata": {
-          "description": "The SKU of App Service Plan supporting Private Link"
-        }
-      },
-      "linuxFxVersion": {
-        "type": "string",
-        "defaultValue": "DOTNET|6",
-        "metadata": {
-          "description": "The Runtime stack of current web app"
-        }
-      },
-      "location": {
-        "type": "string",
-        "defaultValue": "[resourceGroup().location]",
-        "metadata": {
-          "description": "Location for all resources."
-        }
+        "name": "[parameters('sku')]"
       }
     },
-    "variables": {
-      "webAppPortalName": "[format('{0}-webapp', parameters('webAppName'))]",
-      "appServicePlanName": "[format('AppServicePlan-{0}', parameters('webAppName'))]"
-    },
-    "resources": [
-      {
-        "type": "Microsoft.Web/serverfarms",
-        "apiVersion": "2022-03-01",
-        "name": "[variables('appServicePlanName')]",
-        "location": "[parameters('location')]",
-        "sku": {
-          "name": "[parameters('sku')]"
-        },
-        "kind": "linux",
-        "properties": {
-          "reserved": true
-        }
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2022-03-01",
+      "name": "[variables('webAppPortalName')]",
+      "location": "[parameters('location')]",
+      "kind": "app",
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+        "siteConfig": {
+          "numberOfWorkers": 1
+  },
+        "httpsOnly": true
       },
-      {
-        "type": "Microsoft.Web/sites",
-        "apiVersion": "2022-03-01",
-        "name": "[variables('webAppPortalName')]",
-        "location": "[parameters('location')]",
-        "kind": "app",
-        "properties": {
-          "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
-          "siteConfig": {
-            "linuxFxVersion": "[parameters('linuxFxVersion')]",
-            "ftpsState": "FtpsOnly"
-          },
-          "httpsOnly": true
-        },
-        "identity": {
-          "type": "SystemAssigned"
-        },
-        "dependsOn": [
-          "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
-        ]
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "2022-03-01",
+      "name": "[concat(variables('webAppPortalName'), '/web')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+          "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]"
+      ],
+      "properties": {
+          "numberOfWorkers": 1,
+          "defaultDocuments": [
+              "Default.htm",
+              "Default.html",
+              "Default.asp",
+              "index.htm",
+              "index.html",
+              "iisstart.htm",
+              "default.aspx",
+              "index.php",
+              "hostingstart.html"
+          ],
+          "netFrameworkVersion": "v6.0",
+          "remoteDebuggingVersion": "VS2019",
+          "virtualApplications": [
+              {
+                  "virtualPath": "/",
+                  "physicalPath": "site\\wwwroot",
+                  "preloadEnabled": false
+              }
+          ],
+          "http20Enabled": false,
+          "minTlsVersion": "1.2",
+          "scmMinTlsVersion": "1.2",
+          "ftpsState": "FtpsOnly",
+          "preWarmedInstanceCount": 0,
+          "functionsRuntimeScaleMonitoringEnabled": false,
+          "minimumElasticInstanceCount": 0
       }
-    ]
   }
+  ]
+}

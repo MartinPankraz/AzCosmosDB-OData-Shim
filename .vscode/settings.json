@@ -1,3 +1,3 @@
 {
-    "appService.deploySubpath": "GenericODataWebAPI/bin/Debug/net6.0/publish",
+    "appService.deploySubpath": "GenericODataWebAPI\\bin\\Debug\\net6.0\\publish",
 }
