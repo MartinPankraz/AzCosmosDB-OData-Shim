@@ -79,6 +79,7 @@ You can collect your specific values from the generated Azure Private DNS Zone, 
 ### Configure App Service
 
 - Essentials -> Health Check -> Enable and put path `/health`
+- Settings -> Configuration -> geode name: your location (e.g west europe)
 
 #### Settings
 

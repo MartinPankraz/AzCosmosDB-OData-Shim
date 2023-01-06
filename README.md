@@ -47,7 +47,9 @@ Protected interfaces are:
 
 Consider [tweaking](https://docs.microsoft.com/odata/webapi/batch) the OData batch configuration on the [Startup.cs](GenericODataWebAPI/Startup.cs) depending on your requirements.
 
-#### Postman config to test OData API
+#### Config examples testing the OData API
+
+Build upon [provided queries](sample-http-requests/sflight-requests.http) to test with [VS Code REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) for convenience.
 
 Fill the details you collected from your app registration on AAD on the environment and pay attention to the difference between client_id and scope. They use the same id but have different prefix and suffix. We didn't provide fixed values for the prefix, because they can be altered by you during creation on Azure.
 
