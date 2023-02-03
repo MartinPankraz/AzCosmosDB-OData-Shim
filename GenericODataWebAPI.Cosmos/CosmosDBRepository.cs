@@ -1,15 +1,12 @@
 ﻿namespace GenericODataWebAPI.Cosmos
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Linq.Expressions;
     using System.Threading.Tasks;
     using Microsoft.Azure.Cosmos;
-    using Microsoft.Azure.Cosmos.Linq;
     using GenericODataWebAPI.Core;
-    using Microsoft.AspNet.OData;
-    
+    using Microsoft.AspNetCore.OData.Deltas;
+
     public class CosmosDBRepository<T> : IDataRepository<T> where T : class , IDocumentWithId
     {
        

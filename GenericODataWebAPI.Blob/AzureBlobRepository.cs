@@ -2,13 +2,10 @@ namespace GenericODataWebAPI.Blob
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
     using System.Threading.Tasks;
     using Azure.Storage.Blobs;
     using GenericODataWebAPI.Core; 
-    using System.Text.Json;
-    using Microsoft.AspNet.OData;
+    using Microsoft.AspNetCore.OData.Deltas;
 
     public class AzureBlobRepository<T> : IDataRepository<T> where T : class, IDocumentWithId
     {

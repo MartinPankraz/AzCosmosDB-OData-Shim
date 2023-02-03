@@ -1,25 +1,17 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.OData.Builder;
-using Microsoft.AspNet.OData.Extensions;
-using Microsoft.AspNet.OData.Batch;
+using Microsoft.AspNetCore.OData.Batch;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OData.Edm;
 using Microsoft.Identity.Web;
 using GenericODataWebAPI.Core;
 using GenericODataWebAPI.Cosmos;
-using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.OData;
+using Microsoft.OData.ModelBuilder;
 
 namespace GenericODataWebAPI
 {
@@ -39,7 +31,20 @@ namespace GenericODataWebAPI
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddMicrosoftIdentityWebApi(Configuration, "AzureAd");
 
-            services.AddControllers();
+            /*consider tweaking the batch quota depending on your requirements!*/
+            var odataBatchHandler  = new DefaultODataBatchHandler();
+            odataBatchHandler .MessageQuotas.MaxNestingDepth = 2;
+            odataBatchHandler .MessageQuotas.MaxOperationsPerChangeset = 10;
+            odataBatchHandler .MessageQuotas.MaxReceivedMessageSize = 100;
+
+            services.AddControllers().AddOData(options =>
+                options.Select().Filter().OrderBy().Count().SetMaxTop(1000)
+                    .AddRouteComponents(
+                        routePrefix:"api/odata",
+                        model: GetEdmModel(),
+                        batchHandler: odataBatchHandler
+                    )
+            );
             
             services.AddHealthChecks();
 
@@ -50,7 +55,6 @@ namespace GenericODataWebAPI
 
             services.AddSingleton<IDataRepository<Sflight>>(new CosmosDBRepository<Sflight>(Endpoint,Key,DatabaseId,CollectionId));
             //services.AddSingleton<IDataRepository<Sflight>>(new AzureBlobRepository<Sflight>());
-            services.AddOData();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,21 +81,6 @@ namespace GenericODataWebAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.EnableDependencyInjection();
-                endpoints.Select().Filter().OrderBy().Count().MaxTop(1000);
-
-                /*consider tweaking the batch quota depending on your requirements!*/
-                var odataBatchHandler  = new DefaultODataBatchHandler();
-                odataBatchHandler .MessageQuotas.MaxNestingDepth = 2;
-                odataBatchHandler .MessageQuotas.MaxOperationsPerChangeset = 10;
-                odataBatchHandler .MessageQuotas.MaxReceivedMessageSize = 100;
-
-                endpoints.MapODataRoute(
-                    routeName: "odata",
-                    routePrefix: "api/odata",
-                    model: GetEdmModel(),
-                    batchHandler: odataBatchHandler );
-
                 endpoints.MapHealthChecks("/health");
             });
         }

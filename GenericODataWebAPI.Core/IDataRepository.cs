@@ -1,7 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.AspNet.OData;
+using Microsoft.AspNetCore.OData.Deltas;
 
 namespace GenericODataWebAPI.Core
 {

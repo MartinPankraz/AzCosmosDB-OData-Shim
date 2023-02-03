@@ -4,7 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.31.2"/>
-    <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.5.17"/>
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.0.12"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GenericODataWebAPI.Core\GenericODataWebAPI.Core.csproj"/>

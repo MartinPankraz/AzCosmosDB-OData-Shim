@@ -11,6 +11,8 @@ Furthermore, it enables the [geodes-pattern](https://docs.microsoft.com/azure/ar
 
 > **Note** - Learn more about private connectivity for SAP NodeJS apps powered by distributed Azure CosmosDB NoSQL [here](https://blogs.sap.com/2023/01/27/sap-private-linky-swear-with-azure-global-scale-with-azure-cosmos-db-with-sap-private-link/).
 
+> **Note** - the OData shim is configured to be compatible with other Azure services too. Foundation for [Blob storage](GenericODataWebAPI.Blob/AzureBlobRepository.cs) is already present.
+
 ## Getting Started 🛫
 
 ### Prerequisites to replicate the blue print
