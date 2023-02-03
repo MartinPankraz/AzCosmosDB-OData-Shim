@@ -7,7 +7,9 @@ Dotnet project to connect consumers like apps/services hosted on **SAP Business 
 Furthermore, it enables the [geodes-pattern](https://docs.microsoft.com/azure/architecture/patterns/geodes) for scalable global read-access to selected SAP data and SAP Private Link scenarios for SAP Cloud Application Programming Model (CAP).
 
 1. [Geodes pattern for BTP apps powered by Azure CosmosDB](https://blogs.sap.com/2021/06/11/sap-where-can-i-get-toilet-paper-an-implementation-of-the-geodes-pattern-with-s4-btp-and-azure-cosmosdb/). Learn more about the setup [here](documentation/GEODES-GUIDE.md)
-2. (Coming soon) Private connectivity for SAP CAP apps powered by Azure CosmosDB via OData. Learn more [here](documentation/SAP-PLS-GUIDE.md)
+2. (Coming soon) Private connectivity for SAP CAP apps powered by Azure CosmosDB (serverless) via OData. Learn more [here](documentation/SAP-PLS-GUIDE.md)
+
+> **Note** - Learn more about private connectivity for SAP NodeJS apps powered by distributed Azure CosmosDB NoSQL [here](https://blogs.sap.com/2023/01/27/sap-private-linky-swear-with-azure-global-scale-with-azure-cosmos-db-with-sap-private-link/).
 
 ## Getting Started 🛫
 
