@@ -1,17 +1,17 @@
-# Azure Cosmos DB OData Shim
+# Azure PaaS OData Shim
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=364871140)
 
-Dotnet project to connect consumers like apps/services hosted on **SAP Business Technology Platform** via OData with [Azure CosmosDB](https://learn.microsoft.com/azure/cosmos-db/introduction).
+Dotnet project to connect consumers like apps/services hosted on **SAP Business Technology Platform** via OData with Azure PaaS services like [Azure CosmosDB](https://learn.microsoft.com/azure/cosmos-db/introduction).
 
-Furthermore, it enables the [geodes-pattern](https://docs.microsoft.com/azure/architecture/patterns/geodes) for scalable global read-access to selected SAP data and SAP Private Link scenarios for SAP Cloud Application Programming Model (CAP).
+Apply the app to enable the [geodes-pattern](https://docs.microsoft.com/azure/architecture/patterns/geodes) for scalable global read-access to selected SAP data and SAP Private Link scenarios for SAP Cloud Application Programming Model (CAP).
 
 1. [Geodes pattern for BTP apps powered by Azure CosmosDB](https://blogs.sap.com/2021/06/11/sap-where-can-i-get-toilet-paper-an-implementation-of-the-geodes-pattern-with-s4-btp-and-azure-cosmosdb/). Learn more about the setup [here](documentation/GEODES-GUIDE.md)
 2. (Coming soon) Private connectivity for SAP CAP apps powered by Azure CosmosDB (serverless) via OData. Learn more [here](documentation/SAP-PLS-GUIDE.md)
 
 > **Note** - Learn more about private connectivity for SAP NodeJS apps powered by distributed Azure CosmosDB NoSQL [here](https://blogs.sap.com/2023/01/27/sap-private-linky-swear-with-azure-global-scale-with-azure-cosmos-db-with-sap-private-link/).
 
-> **Note** - the OData shim is configured to be compatible with other Azure services too. Foundation for [Blob storage](GenericODataWebAPI.Blob/AzureBlobRepository.cs) is already present.
+> **Note** - the OData shim is configured to be compatible with any Azure PaaS services. Foundation for [Azure Blob storage](GenericODataWebAPI.Blob/AzureBlobRepository.cs) is already present.
 
 ## Getting Started 🛫
 
