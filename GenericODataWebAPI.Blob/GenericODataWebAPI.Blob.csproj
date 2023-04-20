@@ -4,7 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.16.0"/>
-    <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.0.12"/>
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.1.1"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GenericODataWebAPI.Core\GenericODataWebAPI.Core.csproj"/>
