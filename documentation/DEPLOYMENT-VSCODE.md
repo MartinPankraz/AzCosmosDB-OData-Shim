@@ -6,7 +6,7 @@ In this example we use the [Azure App Service extension](https://marketplace.vis
 2. Maintain or upload environment variables in the [Azure App Service configuration](https://learn.microsoft.com/azure/app-service/configure-common?tabs=portal#configure-app-settings) - just like you did for the `appsettings.json` file for local execution in the previous section.
 3. Deploy to Web App from VS Code or GitHub Codespaces
 
-For developer convenience we added a [publish.bat](publish.bat) file that builds your project and uploads the content to your Azure App Service.
+For developer convenience we added a [publish.bat](../publish.bat) file that builds your project and uploads the content to your Azure App Service.
 
 ```cmd
 .\publish.bat [your resource group] [name of app service]
