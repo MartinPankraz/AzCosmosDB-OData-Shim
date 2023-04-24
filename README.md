@@ -2,16 +2,16 @@
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=364871140)
 
-Dotnet project to connect consumers like apps/services hosted on **SAP Business Technology Platform** via OData with Azure PaaS services like [Azure CosmosDB](https://learn.microsoft.com/azure/cosmos-db/introduction).
+Dotnet6 project to connect consumers like apps/services hosted on **SAP Business Technology Platform** via OData with Azure PaaS services through their native SDKs. This repos uses [Azure CosmosDB](https://learn.microsoft.com/azure/cosmos-db/introduction) and its NoSQL API SDK as well as provides foundation for Azure Blob Storage.
 
-Apply the app to enable the [geodes-pattern](https://docs.microsoft.com/azure/architecture/patterns/geodes) for scalable global read-access to selected SAP data and SAP Private Link scenarios for SAP Cloud Application Programming Model (CAP).
+Apply the app to enable scenarios like below: for scalable global read-access to selected SAP data and SAP Private Link scenarios for SAP Cloud Application Programming Model (CAP).
 
-1. [Geodes pattern for BTP apps powered by Azure CosmosDB](https://blogs.sap.com/2021/06/11/sap-where-can-i-get-toilet-paper-an-implementation-of-the-geodes-pattern-with-s4-btp-and-azure-cosmosdb/). Learn more about the setup [here](documentation/GEODES-GUIDE.md)
-2. (Coming soon) Private connectivity for SAP CAP apps powered by Azure CosmosDB (serverless) via OData. Learn more [here](documentation/SAP-PLS-GUIDE.md)
+1. [Geodes pattern](https://docs.microsoft.com/azure/architecture/patterns/geodes) for BTP apps powered by Azure CosmosDB. Learn more about the setup [here](documentation/GEODES-GUIDE.md) and checkout the corresponding [blog post](https://blogs.sap.com/2021/06/11/sap-where-can-i-get-toilet-paper-an-implementation-of-the-geodes-pattern-with-s4-btp-and-azure-cosmosdb/)
+2. [OData proxy pattern with private connectivity for SAP CAP apps](https://blogs.sap.com/2023/04/24/sap-private-linky-swear-with-azure-enabling-sap-cap-with-azure-services-without-odata-apis-using-sap-private-link/) powered by Azure CosmosDB (serverless). Learn more [here](documentation/SAP-PLS-GUIDE.md)
 
 > **Note** - Learn more about private connectivity for SAP NodeJS apps powered by distributed Azure CosmosDB NoSQL [here](https://blogs.sap.com/2023/01/27/sap-private-linky-swear-with-azure-global-scale-with-azure-cosmos-db-with-sap-private-link/).
 
-> **Note** - the OData shim is configured to be compatible with any Azure PaaS services. Foundation for [Azure Blob storage](GenericODataWebAPI.Blob/AzureBlobRepository.cs) is already present.
+> **Note** - the OData proxy is configured to be compatible with any Azure PaaS services. Foundation for [Azure Blob storage](GenericODataWebAPI.Blob/AzureBlobRepository.cs) is already present.
 
 ## Getting Started 🛫
 
@@ -20,10 +20,10 @@ Apply the app to enable the [geodes-pattern](https://docs.microsoft.com/azure/ar
 Our implementation creates a fully functional solution. The approach is standardized, so that all components could be replaced as long as the runtime environment for the application stays .NET 6. To replicate our particular setup you will need:
 
 - [Azure account with subscription](https://azure.microsoft.com/free/) and rights to deploy Azure CosmosDB and App Service in two regions
-- Azure AD authorization to configure app registration and potentially give admin consent initially
 - SAP on Azure with private VNet connectivity or routing from private VNet to SAP any-premise
 - [SAP BTP account](https://cockpit.eu20.hana.ondemand.com/cockpit) with Business Application Studio, Destination configured and Fiori Launchpad service to host an HTML5 app
-- Access to SE80 on SAP backend to upload [Z-Programm](ZDemoFrontDoorReport.abap) for data extraction HTTP Post via ABAP.
+- (optional) Azure AD authorization to configure app registration and potentially give admin consent initially
+- (optional) Access to SE80 on SAP backend to upload [Z-Programm](ZDemoFrontDoorReport.abap) for data extraction HTTP Post via ABAP.
 
 ### Quickstart 🚀
 
